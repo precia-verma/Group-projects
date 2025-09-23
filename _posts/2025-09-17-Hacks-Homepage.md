@@ -88,6 +88,6 @@ body {
   <p>The inconic game of rock paper scissors has come into a website!</p>
   <div class="btn-wrap">
     <a class="cosmic-btn" href="https://pages.opencodingsociety.com/rock-paper-scissor/" target="_blank">Live Game Site</a>
-    <a class="cosmic-btn" href="https://precia-verma.github.io/Group-projects/RPSblog" target="_blank">Blog</a>
+    <a class="cosmic-btn" href="https://github.com/precia-verma/Group-projects/issues/13" target="_blank">Blog</a>
   </div>
 </div>

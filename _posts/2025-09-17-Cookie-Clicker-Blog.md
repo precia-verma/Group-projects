@@ -34,6 +34,63 @@ Buying Milk gives a sweet boost: it **doubles cookies per click** and makes the 
 
 ---
 
+## 🥛 How the Milk Upgrade Works (Code Explained)
+
+```javascript
+// --- Milk Upgrade Feature ---
+const milkUpgrade = {
+  name: "Milk",
+  emoji: "🥛",
+  price: 1000,
+  itemEffected: "click",
+  multiplier: 2,
+};
+
+// Add Milk to upgrades list
+shop.upgrades.push(milkUpgrade);
+
+// Restore Milk upgrade from localStorage
+let hasMilk = localStorage.getItem("hasMilk") === "true";
+
+// Listen for Milk button click
+document.addEventListener("DOMContentLoaded", () => {
+  const milkBtn = document.getElementById("milkBtn");
+  if (milkBtn) {
+    if (hasMilk) milkBtn.disabled = true;
+    milkBtn.addEventListener("click", () => {
+      if (hasMilk) {
+        alert("You already own Milk!");
+        return;
+      }
+      if (cookie.cookies >= milkUpgrade.price) {
+        cookie.addCookies(-milkUpgrade.price);
+        cookie.cookieMulti *= milkUpgrade.multiplier;
+        hasMilk = true;
+        localStorage.setItem("hasMilk", "true");
+        milkBtn.disabled = true;
+        alert("Milk purchased! Your cookies per click are doubled.");
+      } else {
+        alert("Not enough cookies!");
+      }
+    });
+  }
+});
+```
+
+### What does this code mean and what does it do?
+- This code adds a new upgrade called "Milk" to the Cookie Clicker shop. The Milk upgrade costs 1000 cookies and, when purchased, doubles the number of cookies you get per click.
+- The `milkUpgrade` object defines the upgrade's name, emoji, price, what it affects (clicks), and its multiplier (2x).
+- The upgrade is added to the shop's list of upgrades so it appears in the game.
+- The code checks if the player already owns Milk by looking in `localStorage` (so the upgrade is remembered even if you reload the page).
+- When the Milk button is clicked:
+  - If you already own Milk, it shows an alert and does nothing.
+  - If you have enough cookies, it subtracts the price, doubles your cookies per click, marks Milk as owned, saves this to `localStorage`, disables the button, and shows a success alert.
+  - If you don't have enough cookies, it shows an alert saying so.
+
+This feature makes the game more strategic and rewarding, giving players a big boost when they buy Milk!
+
+---
+
 ## 🎮 Play the Game
 👉 **[Cookie Clicker Game Live Site](https://precia-verma.github.io/Group-projects/cookie-clicker-game/)**  
 

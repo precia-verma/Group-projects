@@ -41,12 +41,11 @@ Welcome LxD Coders!
             Snake Game
         </div>
     </a>
-    <a href="/homebrew-installation-shop/" style="text-decoration: none;">
-    </a>
-        <div style="background-color: #FFEE8C; color: #b19cd8; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-           Homebrew Installation Shop
-        </div>
-    </a>
+    <a href="https://precia-verma.github.io/Group-projects/front-page/" style="text-decoration: none;">
+          <div style="background: linear-gradient(135deg,#85d4b7 0%, #b19cd8 50%, #ffb3c1 100%); color: #ffffff; padding: 10px 20px; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+              Tools Setup Car Game
+          </div>
+     </a>
 </div>
 
 <br>

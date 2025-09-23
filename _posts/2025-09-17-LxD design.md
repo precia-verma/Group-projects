@@ -16,6 +16,17 @@ body {
   overflow-x: hidden;
 }
 
+/* Twinkling stars canvas overlay */
+#star-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* create layers of twinkling stars */
 body::before, body::after {
   content: "";
@@ -86,6 +97,11 @@ h1, h2, h3 {
 }
 </style>
 
+
+<!-- Twinkling Stars Canvas -->
+<canvas id="star-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1;"></canvas>
+
+
 <!-- ====== Inline Rocket SVG (no image needed) ====== -->
 <svg id="rocket" viewBox="0 0 64 64" style="position:absolute;width:60px;height:60px;pointer-events:none;left:50vw;top:50vh;z-index:9999;">
   <path fill="#ccc" d="M32 0C24 10 22 24 24 38l-6 8 8-4 4 10 4-10 8 4-6-8c2-14 0-28-8-38z"/>
@@ -93,6 +109,8 @@ h1, h2, h3 {
 </svg>
 
 <!-- === JS === -->
+
+<!-- Place canvas and script at the end of the body for reliability -->
 <script>
 // Make rocket cursor follow mouse smoothly (closer, but not instant)
 const rocket = document.getElementById('rocket');
@@ -107,7 +125,6 @@ document.addEventListener('mousemove', function(e) {
 });
 
 function animateRocket() {
-  // Lerp closer to cursor (higher factor = closer)
   currentX += (targetX - currentX) * 0.25;
   currentY += (targetY - currentY) * 0.25;
   rocket.style.left = currentX + 'px';
@@ -115,6 +132,64 @@ function animateRocket() {
   requestAnimationFrame(animateRocket);
 }
 animateRocket();
+
+// Twinkling stars canvas animation
+window.addEventListener('DOMContentLoaded', function() {
+  const starCanvas = document.getElementById('star-canvas');
+  const ctx = starCanvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 200;
+  function resizeCanvas() {
+    starCanvas.width = window.innerWidth;
+    starCanvas.height = window.innerHeight;
+    starCanvas.style.width = '100vw';
+    starCanvas.style.height = '100vh';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    createStars();
+  });
+
+  function randomBetween(a, b) {
+    return a + Math.random() * (b - a);
+  }
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: Math.random() * starCanvas.width,
+        y: Math.random() * starCanvas.height,
+        r: randomBetween(1.2, 2.8),
+        baseAlpha: randomBetween(0.7, 1),
+        twinkleSpeed: randomBetween(0.01, 0.035),
+        twinklePhase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  createStars();
+
+  function drawStars() {
+    ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+    let t = Date.now() * 0.002;
+    for (let star of stars) {
+      let twinkle = Math.sin(t * 2 + star.twinklePhase) * 0.5 + 0.5;
+      let alpha = star.baseAlpha * (0.8 + 0.8 * twinkle);
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.shadowColor = '#a8d8ff';
+      ctx.shadowBlur = 16;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+});
 </script>
 
 # 🌌 Mission Control — LxD Plan
@@ -133,41 +208,49 @@ Ready for launch! This page charts every stop on the LxD journey.
 
 ---
 
-<div class="star-card">
-### 🌠 1. Jokes  
-Fun JS jokes inside Jupyter notebooks—practice running JavaScript cells and moving files around GitHub Pages.  
-[Blast off →](https://pages.opencodingsociety.com/github/pages/jokes)
-</div>
+> ### 🌠 1. Jokes  
+> Fun JS jokes inside Jupyter notebooks—practice running JavaScript cells and moving files around GitHub Pages.  
+> [Blast off →](https://pages.opencodingsociety.com/github/pages/jokes)
 
-<div class="star-card">
-### 🪐 2. Anatomy  
-Map of your repo universe: `_posts`, `_layouts`, `_config.yml`—learn how Jekyll assembles sites from stardust.  
-[Orbit here →](https://pages.opencodingsociety.com/github/pages/anatomy)
-</div>
+> ### 🪐 2. Anatomy  
+> Map of your repo universe: `_posts`, `_layouts`, `_config.yml`—learn how Jekyll assembles sites from stardust.  
+> [Orbit here →](https://pages.opencodingsociety.com/github/pages/anatomy)
 
-<div class="star-card">
-### 🌌 3. Theme  
-Swap constellations (themes) with Makefile spells like `make use-minima` and override layouts locally.  
-[Dock here →](https://pages.opencodingsociety.com/github/pages/theme)
-</div>
+> ### 🌌 3. Theme  
+> Swap constellations (themes) with Makefile spells like `make use-minima` and override layouts locally.  
+> [Dock here →](https://pages.opencodingsociety.com/github/pages/theme)
 
-<div class="star-card">
-### ✍️ 4. Markdown  
-Markdown is your star chart—mix HTML, CSS, and images to design planets of content.  
-[Launch pad →](https://pages.opencodingsociety.com/github/pages/markdown)
-</div>
+> ### ✍️ 4. Markdown  
+> Markdown is your star chart—mix HTML, CSS, and images to design planets of content.  
+> [Launch pad →](https://pages.opencodingsociety.com/github/pages/markdown)
 
-<div class="star-card">
-### 🔧 5. Jekyll  
-Master Liquid templates and loops to auto-generate blog universes.  
-[Hyperjump →](https://pages.opencodingsociety.com/github/pages/jekyll)
-</div>
+> ### 🔧 5. Jekyll  
+> Master Liquid templates and loops to auto-generate blog universes.  
+> [Hyperjump →](https://pages.opencodingsociety.com/github/pages/jekyll)
 
-<div class="star-card">
-### 🚀 6. Hacks  
-Apply everything: custom nav, JS in notebooks, Utterances comments—turn theory into a working interstellar station.  
-[Warp speed →](https://pages.opencodingsociety.com/github/pages/hacks)
-</div>
+> ### 🚀 6. Hacks  
+> Apply everything: custom nav, JS in notebooks, Utterances comments—turn theory into a working interstellar station.  
+> [Warp speed →](https://pages.opencodingsociety.com/github/pages/hacks)
+
+---
+
+## 🚗 Our LxD Design Process: Plan A, Plan B, and Teamwork
+
+For our LxD (Learning Experience Design) project, we focused on planning, creativity, and collaboration:
+
+- **Plan A & Plan B:**
+  - We always made a primary plan (Plan A) and a backup plan (Plan B) to stay flexible and ready for any challenges.
+
+- **Background Animation Hack:**
+  - Using the `background.md` hack, we created a scene with a car passing by on a street. Above the animation, we placed different buttons to represent the steps of an LxD designer. Each button highlights a key phase, making the process interactive and visual.
+
+- **Tracking Our Work:**
+  - To stay organized, we documented everything in multiple blogs and GitHub issues. This helped us keep track of progress, ideas, and feedback.
+
+- **Team Roles:**
+  - We assigned one Scrum Master to lead the process, one Scrum Assistant to help coordinate, and the rest of the team as dedicated workers. This structure kept our workflow smooth and everyone engaged.
+
+This approach helped us visualize the LxD journey, adapt to changes, and work efficiently as a team!
 
 ---
 
