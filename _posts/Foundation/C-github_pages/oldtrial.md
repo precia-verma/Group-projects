@@ -1,8 +1,8 @@
 ---
-title: "The Team Retrospective!"
+title: "Trial!"
 layout: post
 date: 2025-09-16
-permalink: /team-retrospective/
+permalink: /nah/
 ---
 
 <html lang="en">
