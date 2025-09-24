@@ -1,4 +1,4 @@
----
+--
 layout: default
 title:  Snake Game 2.0
 permalink: /snake
@@ -64,6 +64,39 @@ permalink: /snake
     button.link-alert:hover {
         background-color: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Hover effects for styled buttons */
+    #snake_new_game:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3) !important;
+    }
+
+    #snake_setting_menu:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(157, 80, 187, 0.3) !important;
+    }
+
+    /* Settings UI Styles */
+    #snake_setting input[type="radio"] + label:hover,
+    #snake_setting input[type="checkbox"] + label:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #snake_setting input[type="radio"]:checked + label {
+        border: 2px solid #fff !important;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+    }
+
+    #snake_setting input[type="checkbox"]:checked + label {
+        border: 2px solid #fff !important;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+    }
+
+    #snake_new_game2:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3) !important;
     }
 
     #snake_gameover a:hover, #snake_gameover button:hover, #snake_setting a:hover, #snake_setting button:hover, #snake_menu a:hover, #snake_menu button:hover{
@@ -166,8 +199,14 @@ permalink: /snake
         <!-- Main Menu -->
     <div id="snake_menu" class="py-4 text-light">
             <p>Welcome to Snake, press <span style="background-color: #FFFFFF; color: #000000">space</span> to begin</p>
-            <button id="snake_new_game" class="link-alert" type="button">new game</button>
-            <button id="snake_setting_menu" class="link-alert" type="button">settings</button>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin: 1.5rem 0; flex-wrap: wrap;">
+              <button id="snake_new_game" style="background: linear-gradient(90deg, #4f8cff, #38e8ff); color: white; border: none; border-radius: 0.75rem; padding: 0.75rem 2rem; font-size: 1.2rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; transition: all 0.2s ease;">
+                🎮 New Game
+              </button>
+              <button id="snake_setting_menu" style="background: linear-gradient(90deg, #9d50bb, #6b46c1); color: white; border: none; border-radius: 0.75rem; padding: 0.75rem 2rem; font-size: 1.2rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; transition: all 0.2s ease;">
+                ⚙️ Settings
+              </button>
+            </div>
         </div>
         <!-- Game Over -->
         <div id="snake_gameover" class="py-4 text-light">
@@ -179,47 +218,100 @@ permalink: /snake
     <canvas id="snake_canvas" class="wrap hidden" width="320" height="320" tabindex="1"></canvas>
         <!-- Settings Screen -->
         <div id="snake_setting" class="py-4 text-light">
-            <p>Settings Screen, press <span style="background-color: #FFFFFF; color: #000000">space</span> to go back to playing</p>
-            <button id="snake_new_game2" class="link-alert" type="button">new game</button>
-            <br>
-            <p>Speed:
-                <input id="snake_speed0" type="radio" name="snake_speed" value="300"/>
-                <label for="snake_speed0">Grandma</label>
-                <input id="snake_speed1" type="radio" name="snake_speed" value="120"/>
-                <label for="snake_speed1">Slow</label>
-                <input id="snake_speed2" type="radio" name="snake_speed" value="75" checked/>
-                <label for="snake_speed2">Normal</label>
-                <input id="snake_speed3" type="radio" name="snake_speed" value="35"/>
-                <label for="snake_speed3">Fast</label>
-                <input id="snake_speed4" type="radio" name="snake_speed" value="10"/>
-                <label for="snake_speed4">Impossible</label>
-            </p>
-            <p>Wall:
-                <input id="snake_wallon" type="radio" name="snake_wall" value="1" checked/>
-                <label for="snake_wallon">On</label>
-                <input id="snake_walloff" type="radio" name="snake_wall" value="0"/>
-                <label for="snake_walloff">Off</label>
-            </p>
-            <p>Internal Walls:
-                <input id="snake_internalwalls_off" type="radio" name="snake_internal_walls" value="0" checked/>
-                <label for="snake_internalwalls_off">Off</label>
-                <input id="snake_internalwalls_few" type="radio" name="snake_internal_walls" value="1"/>
-                <label for="snake_internalwalls_few">Few</label>
-                <input id="snake_internalwalls_many" type="radio" name="snake_internal_walls" value="2"/>
-                <label for="snake_internalwalls_many">Many</label>
-            </p>
-            <p>Challenge Mode:
-                <input id="snake_challengeon" type="checkbox" name="snake_challenge" />
-                <label for="snake_challengeon">Enable Challenge Mode (reverse controls: ↑→↓, ↓→↑, ←→→, →→←)</label>
-            </p>
-            <p>Lava Challenge:
-                <input id="snake_lava_challenge" type="checkbox" name="snake_lava_challenge" />
-                <label for="snake_lava_challenge">Enable Lava Challenge (lava blocks reduce snake length by 1)</label>
-            </p>
-            <p>Enemies Mode:
-                <input id="snake_enemies_mode" type="checkbox" name="snake_enemies_mode" />
-                <label for="snake_enemies_mode">Enable Enemies (red snakes chase you and cause death on contact)</label>
-            </p>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3 style="color: #fff; margin-bottom: 0.5rem;">⚙️ Game Settings</h3>
+                <p style="margin-bottom: 1.5rem;">Press <span style="background-color: #FFFFFF; color: #000000; padding: 2px 8px; border-radius: 4px;">space</span> to go back to playing</p>
+                <button id="snake_new_game2" style="background: linear-gradient(90deg, #4f8cff, #38e8ff); color: white; border: none; border-radius: 0.75rem; padding: 0.75rem 2rem; font-size: 1.1rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; transition: all 0.2s ease; margin-bottom: 2rem;">
+                    🎮 New Game
+                </button>
+            </div>
+
+            <!-- Speed Settings -->
+            <div style="background: rgba(0,0,0,0.8); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3);">
+                <h4 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🚀 <span>Game Speed</span>
+                </h4>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                    <input id="snake_speed0" type="radio" name="snake_speed" value="300" style="display: none;"/>
+                    <label for="snake_speed0" style="background: linear-gradient(135deg, #6b73ff, #000dff); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">🐌 Grandma</label>
+                    <input id="snake_speed1" type="radio" name="snake_speed" value="120" style="display: none;"/>
+                    <label for="snake_speed1" style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">🚶 Slow</label>
+                    <input id="snake_speed2" type="radio" name="snake_speed" value="75" checked style="display: none;"/>
+                    <label for="snake_speed2" style="background: linear-gradient(135deg, #00b894, #00a085); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid #fff;">✨ Normal</label>
+                    <input id="snake_speed3" type="radio" name="snake_speed" value="35" style="display: none;"/>
+                    <label for="snake_speed3" style="background: linear-gradient(135deg, #fdcb6e, #e17055); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">🔥 Fast</label>
+                    <input id="snake_speed4" type="radio" name="snake_speed" value="10" style="display: none;"/>
+                    <label for="snake_speed4" style="background: linear-gradient(135deg, #e17055, #d63031); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">💀 Impossible</label>
+                </div>
+            </div>
+
+            <!-- Wall Settings -->
+            <div style="background: rgba(0,0,0,0.8); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3);">
+                <h4 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🧱 <span>Border Walls</span>
+                </h4>
+                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                    <input id="snake_wallon" type="radio" name="snake_wall" value="1" checked style="display: none;"/>
+                    <label for="snake_wallon" style="background: linear-gradient(135deg, #e17055, #d63031); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid #fff;">🔒 On</label>
+                    <input id="snake_walloff" type="radio" name="snake_wall" value="0" style="display: none;"/>
+                    <label for="snake_walloff" style="background: linear-gradient(135deg, #00b894, #00a085); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">🔓 Off</label>
+                </div>
+            </div>
+
+            <!-- Internal Walls Settings -->
+            <div style="background: rgba(0,0,0,0.8); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3);">
+                <h4 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🏗️ <span>Internal Walls</span>
+                </h4>
+                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                    <input id="snake_internalwalls_off" type="radio" name="snake_internal_walls" value="0" checked style="display: none;"/>
+                    <label for="snake_internalwalls_off" style="background: linear-gradient(135deg, #00b894, #00a085); color: white; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid #fff;">✅ Off</label>
+                    <input id="snake_internalwalls_few" type="radio" name="snake_internal_walls" value="1" style="display: none;"/>
+                    <label for="snake_internalwalls_few" style="background: linear-gradient(135deg, #fdcb6e, #e17055); color: white; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">⚠️ Few</label>
+                    <input id="snake_internalwalls_many" type="radio" name="snake_internal_walls" value="2" style="display: none;"/>
+                    <label for="snake_internalwalls_many" style="background: linear-gradient(135deg, #e17055, #d63031); color: white; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent;">🔴 Many</label>
+                </div>
+            </div>
+
+            <!-- Challenge Modes -->
+            <div style="background: rgba(0,0,0,0.8); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3);">
+                <h4 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🎯 <span>Challenge Modes</span>
+                </h4>
+                
+                <!-- Challenge Mode Toggle -->
+                <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <input id="snake_challengeon" type="checkbox" name="snake_challenge" style="display: none;"/>
+                        <label for="snake_challengeon" style="background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent; display: flex; align-items: center; gap: 0.5rem;">
+                            <span id="challenge-toggle">🔄</span> Challenge Mode
+                        </label>
+                    </div>
+                    <p style="color: #fff; font-size: 0.9rem; margin: 0.5rem 0 0 0;">Reverse controls: ↑→↓, ↓→↑, ←→→, →→←</p>
+                </div>
+
+                <!-- Lava Challenge Toggle -->
+                <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <input id="snake_lava_challenge" type="checkbox" name="snake_lava_challenge" style="display: none;"/>
+                        <label for="snake_lava_challenge" style="background: linear-gradient(135deg, #fd79a8, #e84393); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent; display: flex; align-items: center; gap: 0.5rem;">
+                            <span id="lava-toggle">🔥</span> Lava Challenge
+                        </label>
+                    </div>
+                    <p style="color: #fff; font-size: 0.9rem; margin: 0.5rem 0 0 0;">Lava blocks reduce snake length by 1</p>
+                </div>
+
+                <!-- Enemies Mode Toggle -->
+                <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 1rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <input id="snake_enemies_mode" type="checkbox" name="snake_enemies_mode" style="display: none;"/>
+                        <label for="snake_enemies_mode" style="background: linear-gradient(135deg, #fd79a8, #e84393); color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; border: 2px solid transparent; display: flex; align-items: center; gap: 0.5rem;">
+                            <span id="enemies-toggle">🐍</span> Enemies Mode
+                        </label>
+                    </div>
+                    <p style="color: #fff; font-size: 0.9rem; margin: 0.5rem 0 0 0;">Red snakes chase you and cause death on contact</p>
+                </div>
+            </div>
         </div>
 
 <div id="snake_debug" style="position:fixed;right:12px;bottom:12px;background:rgba(0,0,0,0.7);color:#fff;padding:8px;border-radius:6px;font-family:monospace;z-index:9999;display:none;min-width:160px;">snake debug</div>
@@ -415,6 +507,31 @@ permalink: /snake
                 enemies = [];
             }
         });
+
+        // Update toggle icons for checkboxes
+        function updateToggleIcons() {
+            const challengeToggle = document.getElementById('challenge-toggle');
+            const lavaToggle = document.getElementById('lava-toggle');
+            const enemiesToggle = document.getElementById('enemies-toggle');
+            
+            if(challenge && challengeToggle) {
+                challengeToggle.textContent = challenge.checked ? '✅' : '🔄';
+            }
+            if(lavaChallenge && lavaToggle) {
+                lavaToggle.textContent = lavaChallenge.checked ? '✅' : '🔥';
+            }
+            if(enemiesModeCheckbox && enemiesToggle) {
+                enemiesToggle.textContent = enemiesModeCheckbox.checked ? '✅' : '🐍';
+            }
+        }
+
+        // Add toggle icon updates to existing event listeners
+        if(challenge) challenge.addEventListener('change', updateToggleIcons);
+        if(lavaChallenge) lavaChallenge.addEventListener('change', updateToggleIcons);
+        if(enemiesModeCheckbox) enemiesModeCheckbox.addEventListener('change', updateToggleIcons);
+        
+        // Initialize toggle icons
+        updateToggleIcons();
 
         // Keyboard controls
         window.addEventListener('keydown', function(evt){
