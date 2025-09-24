@@ -1,4 +1,4 @@
---
+---
 layout: default
 title:  Snake Game 2.0
 permalink: /snake
@@ -314,7 +314,6 @@ permalink: /snake
             </div>
         </div>
 
-<div id="snake_debug" style="position:fixed;right:12px;bottom:12px;background:rgba(0,0,0,0.7);color:#fff;padding:8px;border-radius:6px;font-family:monospace;z-index:9999;display:none;min-width:160px;">snake debug</div>
 <script>
 // Complete Snake Game Implementation
 (function(){
@@ -369,7 +368,7 @@ permalink: /snake
     function $id(id){ return document.getElementById(id); }
 
     function setDebug(msg){
-        console.log('Snake Debug:', msg);
+        // console.log('Snake Debug:', msg);
         const d = $id('snake_debug');
         if(!d) return;
         d.style.display = 'block';
