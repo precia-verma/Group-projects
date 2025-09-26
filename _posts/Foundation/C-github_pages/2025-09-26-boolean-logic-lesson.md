@@ -84,20 +84,23 @@ Let's analyze the boolean logic in our calculator step by step:
 <div id="lesson-animation">
   <div class="calculator-container">
       <div class="calculator-output" id="lesson-output">0</div>
-      <div class="calculator-number">1</div>
-      <div class="calculator-number">2</div>
-      <div class="calculator-number">3</div>
-      <div class="calculator-operation">+</div>
-      <div class="calculator-number">4</div>
-      <div class="calculator-number">5</div>
-      <div class="calculator-number">6</div>
-      <div class="calculator-operation">-</div>
+      <div class="calculator-clear">AC</div>
+      <div class="calculator-operation">+/-</div>
+      <div class="calculator-operation">%</div>
+      <div class="calculator-operation">÷</div>
       <div class="calculator-number">7</div>
       <div class="calculator-number">8</div>
       <div class="calculator-number">9</div>
       <div class="calculator-operation">*</div>
-      <div class="calculator-clear">A/C</div>
-      <div class="calculator-number">0</div>
+      <div class="calculator-number">4</div>
+      <div class="calculator-number">5</div>
+      <div class="calculator-number">6</div>
+      <div class="calculator-operation">-</div>
+      <div class="calculator-number">1</div>
+      <div class="calculator-number">2</div>
+      <div class="calculator-number">3</div>
+      <div class="calculator-operation">+</div>
+      <div class="calculator-number zero">0</div>
       <div class="calculator-number">.</div>
       <div class="calculator-equals">=</div>
   </div>
@@ -383,39 +386,50 @@ Check off each item as you master it:
   .calculator-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    gap: 10px;
-    max-width: 300px;
+    grid-template-rows: 80px repeat(4, 60px);
+    gap: 8px;
+    width: 320px;
     margin: 20px auto;
     padding: 20px;
     background-color: #333;
     border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   }
   
   .calculator-output {
     grid-column: span 4;
-    grid-row: span 1;
+    grid-row: 1/2;
     border-radius: 10px;
-    padding: 0.25em;
-    font-size: 20px;
-    border: 5px solid black;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px solid #555;
     display: flex;
     align-items: center;
     background-color: #000;
     color: #0f0;
     text-align: right;
     justify-content: flex-end;
+    min-height: 50px;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
   }
   
   .calculator-number, .calculator-operation, .calculator-clear, .calculator-equals {
-    border-radius: 10px;
-    padding: 20px;
-    margin: 5px;
-    font-size: 20px;
-    border: 3px solid black;
+    border-radius: 8px;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #555;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    user-select: none;
   }
   
   .calculator-number {
@@ -438,9 +452,20 @@ Check off each item as you master it:
     color: white;
   }
   
+  .calculator-number.zero {
+    grid-column: span 2;
+    justify-content: flex-start;
+    padding-left: 20px;
+  }
+  
   .calculator-number:hover, .calculator-operation:hover, .calculator-clear:hover, .calculator-equals:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    opacity: 0.9;
+  }
+  
+  .calculator-number:active, .calculator-operation:active, .calculator-clear:active, .calculator-equals:active {
+    transform: scale(0.95);
   }
   
   .logic-analysis {
@@ -455,11 +480,91 @@ Check off each item as you master it:
     border-radius: 3px;
   }
   
+  /* Enhanced code styling */
   code {
-    background-color: #f4f4f4;
-    padding: 2px 6px;
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 3px 6px;
     border-radius: 4px;
-    font-family: 'Courier New', monospace;
+    font-family: 'Courier New', Monaco, 'Lucida Console', monospace;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+  }
+  
+  pre {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #007acc;
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+  
+  pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+    font-size: 14px;
+  }
+  
+  /* Syntax highlighting for code blocks */
+  .highlight pre {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #e9ecef;
+  }
+  
+  .language-javascript {
+    background-color: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .language-javascript code {
+    background-color: transparent;
+    color: #e2e8f0;
+  }
+  
+  /* Table styling for truth tables */
+  table {
+    border-collapse: collapse;
+    margin: 15px 0;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    .calculator-container {
+      width: 280px;
+      padding: 15px;
+    }
+    
+    .calculator-output {
+      font-size: 20px;
+      padding: 10px;
+    }
+    
+    .calculator-number, .calculator-operation, .calculator-clear, .calculator-equals {
+      font-size: 16px;
+      min-height: 45px;
+    }
   }
   
   .highlight-true {
@@ -560,16 +665,24 @@ function number(value) {
 // Operation buttons listener
 operations.forEach(button => {
   button.addEventListener("click", function() {
-    operation(button.textContent);
-    updateBooleanAnalysis(`Operation: ${button.textContent}`);
+    const op = button.textContent;
+    if (op === "+/-" || op === "%") {
+      handleSpecialOperation(op);
+    } else {
+      operation(op);
+      updateBooleanAnalysis(`Operation: ${op}`);
+    }
   });
 });
 
 // Enhanced operation function
 function operation(choice) {
+    // Convert division symbol
+    if (choice === "÷") choice = "/";
+    
     console.log(`Boolean check: firstNumber == null → ${firstNumber == null}`);
     if (firstNumber == null) {
-        firstNumber = parseInt(output.innerHTML);
+        firstNumber = parseFloat(output.innerHTML);
         nextReady = true;
         operator = choice;
         console.log(`Stored first number: ${firstNumber}, operator: ${choice}`);
@@ -577,9 +690,11 @@ function operation(choice) {
     }
     
     console.log("Calculating with existing number");
-    firstNumber = calculate(firstNumber, parseFloat(output.innerHTML)); 
+    if (operator !== null) {
+        firstNumber = calculate(firstNumber, parseFloat(output.innerHTML)); 
+        output.innerHTML = firstNumber.toString();
+    }
     operator = choice;
-    output.innerHTML = firstNumber.toString();
     nextReady = true;
 }
 
@@ -623,17 +738,22 @@ equals.forEach(button => {
 
 // Equal action
 function equal() {
-    firstNumber = calculate(firstNumber, parseFloat(output.innerHTML));
-    output.innerHTML = firstNumber.toString();
-    nextReady = true;
-    console.log("Calculation completed");
+    if (firstNumber !== null && operator !== null) {
+        firstNumber = calculate(firstNumber, parseFloat(output.innerHTML));
+        output.innerHTML = firstNumber.toString();
+        operator = null;
+        nextReady = true;
+        console.log("Calculation completed");
+    }
 }
 
 // Clear button listener
 clear.forEach(button => {
   button.addEventListener("click", function() {
-    clearCalc();
-    updateBooleanAnalysis("Clear all");
+    if (button.textContent === "AC") {
+      clearCalc();
+      updateBooleanAnalysis("Clear all");
+    }
   });
 });
 
@@ -644,6 +764,27 @@ function clearCalc() {
     output.innerHTML = "0";
     nextReady = true;
     console.log("Calculator cleared - all boolean flags reset");
+}
+
+// Add special operation handlers
+function handleSpecialOperation(op) {
+    const currentValue = parseFloat(output.innerHTML);
+    let result;
+    
+    switch(op) {
+        case "+/-":
+            result = currentValue * -1;
+            output.innerHTML = result.toString();
+            updateBooleanAnalysis("Toggle sign");
+            console.log(`Boolean operation: ${currentValue} * -1 = ${result}`);
+            break;
+        case "%":
+            result = currentValue / 100;
+            output.innerHTML = result.toString();
+            updateBooleanAnalysis("Convert to percentage");
+            console.log(`Boolean operation: ${currentValue} / 100 = ${result}`);
+            break;
+    }
 }
 
 // Initialize
