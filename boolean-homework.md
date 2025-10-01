@@ -65,6 +65,16 @@ Flips True to False and vice versa
 NOT True = False
 NOT False = True
 ```
+## Things you may need to know:
+- The statement is about the number of possible values a Boolean data type can have. Consider the core definition of "Boolean".
+- focuses on the effect of a specific operator on search results. You should recall which operator is used to narrow a search by requiring all keywords to be present, versus the one that broadens a search to include multiple options.
+- the simplest Boolean operator, which is used to reverse a value. Think about what happens when you "flip" the value of True.
+- evaluate an expression using one of the primary operators. Consider the fundamental rule for many operator: Does it require both conditions to be true, or just one? 
+
+- You need to choose the operator that ensures your search results contain both keywords.
+- you want to find results that include either of the keywords (or both). Select the operator that provides this inclusive result.
+- you are trying to find results for one topic but remove any results that contain a specific, unwanted term. Choose the operator that eliminates a term from your search. 
+
 
 ## 🎊 Ready to Test Your Knowledge?
 
