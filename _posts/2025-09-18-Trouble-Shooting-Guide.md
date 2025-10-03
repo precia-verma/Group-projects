@@ -65,7 +65,7 @@ permalink: /trouble-blogs/
   }
 </style>
 
-<div class="space-header">🪐 Trouble Shooting Guide <span class="space-icon">🚀</span></div>
+<div class="space-header">🪐 Trouble Shooting Guide <span class="space-icon">🚀</span> <span class="space-icon">🛰️</span></div>
 <div id="layer1"></div>
 <div id="layer2"></div>
 <div id="layer3"></div>
@@ -90,12 +90,12 @@ permalink: /trouble-blogs/
 </script>
 
 <div class="space-section">
-  <h2>🛠️ Tool Setup Troubleshooting Guide</h2>
-  <p>Use this page if something is not working.<br>Each section is independent — jump directly to the area you are stuck.<br><span class="space-icon">🌌</span></p>
+  <h2>🛠️ Tool Setup Troubleshooting Guide <span class="space-icon">🌌</span> <span class="space-icon">🪐</span></h2>
+  <p>Use this page if something is not working.<br>Each section is independent — jump directly to the area you are stuck.<br><span class="space-icon">🌌</span> <span class="space-icon">🛸</span></p>
 </div>
 
 <div class="space-section">
-  <h3>🚀 GitHub Commit / Config Recovery</h3>
+  <h3>🚀 GitHub Commit / Config Recovery <span class="space-icon">🪐</span></h3>
   <p>Use these commands if git commit is failing.</p>
   <ul>
     <li>✅ <b>Expectation:</b> You have a GitHub username + email</li>
@@ -109,7 +109,7 @@ git config --global user.email "jm1021@gmail.com"  # change to your Email</code>
 </div>
 
 <div class="space-section">
-  <h3>🛰️ Directory + Clone Recovery</h3>
+  <h3>🛰️ Directory + Clone Recovery <span class="space-icon">🌠</span></h3>
   <ul>
     <li>✅ <b>Expectation:</b> You can <code>cd</code> into your personal directory, and an <code>ls</code> shows your repo folder (ex: student).</li>
   </ul>
@@ -129,7 +129,7 @@ cd ~/jm1021</code></pre>
 </div>
 
 <div class="space-section">
-  <h3>🌠 Virtual Environment Recovery</h3>
+  <h3>🌠 Virtual Environment Recovery <span class="space-icon">🛸</span></h3>
   <ul>
     <li>✅ <b>Expectation:</b> Your terminal prompt shows <code>(venv)</code> prefix.</li>
   </ul>
@@ -169,7 +169,7 @@ source venv/bin/activate</code></pre>
 </div>
 
 <div class="space-section">
-  <h3>🪐 Version Checks</h3>
+  <h3>🪐 Version Checks <span class="space-icon">🌌</span></h3>
   <ul>
     <li>✅ <b>Expectation:</b> Run the bash script below</li>
     <ul>
@@ -194,7 +194,7 @@ done</code></pre>
 
 <!-- New Space-Themed Sections -->
 <div class="space-section">
-  <h3>🌌 404 Error on GitHub Pages</h3>
+  <h3>🌌 404 Error on GitHub Pages <span class="space-icon">🛸</span></h3>
   <ul>
     <li>✅ <b>Expectation:</b> Your GitHub Pages site loads at the expected URL without a 404 error.</li>
     <li>❌ <b>If you see a 404 error when visiting your live site:</b></li>
@@ -212,7 +212,7 @@ done</code></pre>
 </div>
 
 <div class="space-section">
-  <h3>🛸 Makefile Troubleshooting</h3>
+  <h3>🛸 Makefile Troubleshooting <span class="space-icon">🪐</span></h3>
   <ul>
     <li>✅ <b>Expectation:</b> Running <code>make</code> should build or run your project as intended.</li>
     <li>❌ <b>If you get errors like "No rule to make target" or unexpected failures:</b></li>
@@ -231,7 +231,7 @@ cat Makefile</code></pre>
 </div>
 
 <div class="space-section" style="text-align:center; margin-bottom:3rem;">
-  <h3>🌟 Hopefully this helped!</h3>
+  <h3>🌟 Hopefully this helped! <span class="space-icon">🌌</span> <span class="space-icon">🪐</span></h3>
   <p>If you made it this far, your troubleshooting journey is complete.<br>
-  May your code be bug-free and your pages always load! 🚀✨</p>
+  May your code be bug-free and your pages always load! 🚀✨ <span class="space-icon">🛸</span></p>
 </div>
