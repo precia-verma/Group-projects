@@ -126,7 +126,7 @@ Click the links, explore the knowledge, and level-up your mission control skills
 
 ---
 
-### 🌟 Final Star Tips
+### 🌟 Final Star Tips 🌌
 
 * **Test Locally First:** Don’t launch a broken starship—run and debug before committing.  
 * **Commit Messages = Star Maps:** Descriptive logs help future explorers (including future-you).  
