@@ -56,7 +56,7 @@ permalink: /homepage-blogs/
     position: fixed;
     width: 60vw;
     height: 60vw;
-    background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(56,189,248,0) 70%);
+    background: radial-gradient(circle, rgba(60, 196, 255, 0.25) 0%, rgba(56,189,248,0) 70%);
     top: 20%;
     left: 10%;
     filter: blur(80px);
