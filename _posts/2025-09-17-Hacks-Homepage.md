@@ -12,7 +12,7 @@ permalink: /hacks-homepage
 body {
   margin: 0;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
-  background: radial-gradient(ellipse at bottom, #0b1220 0%, #050611 60%);
+  background: radial-gradient(ellipse at bottom, #020a1aff 0%, #050611 60%);
   color: #e6f0ff;
 }
 .section {
