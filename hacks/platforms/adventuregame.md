@@ -4,7 +4,7 @@ title: Background with Object
 description: Use JavaScript to have an in motion background.
 sprite: images/platformer/sprites/grave.png
 background: images/platformer/backgrounds/HauntedMansion.png
-permalink: /background
+permalink: /adventuregame
 ---
 
 <canvas id="world"></canvas> <!-- Canvas element for rendering the game world -->
