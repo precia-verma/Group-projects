@@ -3,7 +3,7 @@ layout: base
 title: Background with Object 
 description: Use JavaScript to have an in motion background.
 sprite: images/platformer/sprites/grave.png
-background: /images/platformer/backgrounds/HauntedMansion.png
+background: images/platformer/backgrounds/HauntedMansion.png
 permalink: /spooky
 ---
 
