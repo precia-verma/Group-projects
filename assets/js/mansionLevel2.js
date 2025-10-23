@@ -4,8 +4,8 @@
     import Level from './GameEngine/<path>.js'
     
     // Create the game environment with a spooky mansion background
-    const gameEnv = new GameEnvBackground('world', 'images/platformer/backgrounds/HauntedMansion.png'); 
-    const player = new AnimatedPlayer(50, 300, 'images/platformer/sprites/grave.png', 64, 64);
+    const gameEnv = new GameEnvBackground('world', 'images/platformer/backgrounds/spookyforestforgame.png'); 
+    const player = new AnimatedPlayer(50, 300, 'images/platformer/sprites/gravestone_1.png', 64, 64);
     
     // Define platforms for the mansion level
     const platforms = [
