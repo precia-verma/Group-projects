@@ -4,7 +4,7 @@ title: Background with Object
 description: Use JavaScript to have an in motion background.
 sprite: images/platformer/sprites/ghost.png
 background: images/platformer/backgrounds/Cemetery.png
-permalink: /spooky
+permalink: /dead
 ---
 
 
