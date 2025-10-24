@@ -87,9 +87,14 @@ class GravestoneMemoryGame {
     this.playerSequence = [];
     this.sequenceIndex = 0;
     
+    // Images
+    this.gravestoneImages = [];
+    this.imagesLoaded = 0;
+    this.totalImages = 2;
+    
     // Gravestone properties
     this.gravestones = [];
-    this.initializeGravestones();
+    this.loadImages();
     
     // Audio context for generating tones
     this.audioContext = null;
@@ -97,9 +102,35 @@ class GravestoneMemoryGame {
     
     // Event listeners
     this.setupEventListeners();
+  }
+  
+  loadImages() {
+    // Load gravestone images
+    const imagePaths = [
+      '/images/platformer/sprites/gravestone_1.png',
+      '/images/platformer/sprites/gravestone_2.png'
+    ];
     
-    // Start rendering
-    this.render();
+    imagePaths.forEach((path, index) => {
+      const img = new Image();
+      img.onload = () => {
+        this.imagesLoaded++;
+        if (this.imagesLoaded === this.totalImages) {
+          this.initializeGravestones();
+          this.render();
+        }
+      };
+      img.onerror = () => {
+        console.error(`Failed to load image: ${path}`);
+        this.imagesLoaded++;
+        if (this.imagesLoaded === this.totalImages) {
+          this.initializeGravestones();
+          this.render();
+        }
+      };
+      img.src = path;
+      this.gravestoneImages[index] = img;
+    });
   }
   
   initializeAudio() {
@@ -137,7 +168,7 @@ class GravestoneMemoryGame {
         isGlowing: false,
         glowIntensity: 0,
         note: colors[i].note,
-        shape: i % 3 // Different gravestone shapes
+        image: this.gravestoneImages[i % this.gravestoneImages.length] // Cycle through available images
       });
     }
   }
@@ -344,7 +375,9 @@ class GravestoneMemoryGame {
   }
   
   drawGravestone(gravestone) {
-    const { x, y, width, height, color, isGlowing, glowColor, glowIntensity, shape } = gravestone;
+    const { x, y, width, height, isGlowing, glowColor, glowIntensity, image } = gravestone;
+    
+    if (!image) return; // Skip if image not loaded
     
     this.ctx.save();
     
@@ -352,89 +385,31 @@ class GravestoneMemoryGame {
     if (isGlowing && glowIntensity > 0) {
       this.ctx.shadowColor = glowColor;
       this.ctx.shadowBlur = 30 * glowIntensity;
-      this.ctx.fillStyle = glowColor;
-      this.ctx.globalAlpha = 0.3 * glowIntensity;
+      this.ctx.globalAlpha = 0.6 * glowIntensity;
       
-      // Draw glow shape
-      this.drawGravestoneShape(x - 5, y - 5, width + 10, height + 10, shape);
+      // Draw glowing background
+      this.ctx.fillStyle = glowColor;
+      this.ctx.fillRect(x - 10, y - 10, width + 20, height + 20);
     }
     
     this.ctx.restore();
     this.ctx.save();
     
-    // Draw main gravestone
-    this.ctx.fillStyle = isGlowing ? 
-      this.blendColors(color, glowColor, glowIntensity * 0.5) : color;
-    this.ctx.strokeStyle = '#000';
-    this.ctx.lineWidth = 2;
-    
-    this.drawGravestoneShape(x, y, width, height, shape);
-    this.ctx.fill();
-    this.ctx.stroke();
-    
-    // Draw decorative elements
-    this.drawGravestoneDetails(x, y, width, height, shape);
+    // Apply color tint if glowing
+    if (isGlowing && glowIntensity > 0) {
+      this.ctx.globalCompositeOperation = 'multiply';
+      this.ctx.fillStyle = glowColor;
+      this.ctx.fillRect(x, y, width, height);
+      this.ctx.globalCompositeOperation = 'screen';
+      this.ctx.globalAlpha = 0.3 * glowIntensity;
+    }
     
     this.ctx.restore();
-  }
-  
-  drawGravestoneShape(x, y, width, height, shape) {
-    this.ctx.beginPath();
     
-    switch (shape) {
-      case 0: // Classic rounded top
-        this.ctx.roundRect(x, y + height * 0.3, width, height * 0.7, 5);
-        this.ctx.ellipse(x + width/2, y + height * 0.3, width/2, height * 0.3, 0, 0, Math.PI * 2);
-        break;
-      case 1: // Cross shape
-        this.ctx.rect(x + width * 0.3, y, width * 0.4, height);
-        this.ctx.rect(x, y + height * 0.2, width, height * 0.3);
-        break;
-      case 2: // Pointed top
-        this.ctx.moveTo(x + width/2, y);
-        this.ctx.lineTo(x + width, y + height * 0.4);
-        this.ctx.lineTo(x + width, y + height);
-        this.ctx.lineTo(x, y + height);
-        this.ctx.lineTo(x, y + height * 0.4);
-        this.ctx.closePath();
-        break;
-    }
-  }
-  
-  drawGravestoneDetails(x, y, width, height, shape) {
-    this.ctx.fillStyle = '#000';
-    this.ctx.font = '12px serif';
-    this.ctx.textAlign = 'center';
+    // Draw the gravestone image
+    this.ctx.drawImage(image, x, y, width, height);
     
-    // Draw "RIP" text
-    this.ctx.fillText('RIP', x + width/2, y + height/2);
-    
-    // Draw decorative crosses or flowers
-    this.ctx.fillStyle = '#444';
-    if (shape === 0) {
-      // Draw small crosses
-      this.ctx.fillRect(x + width * 0.2, y + height * 0.7, 2, 10);
-      this.ctx.fillRect(x + width * 0.15, y + height * 0.73, 10, 2);
-      this.ctx.fillRect(x + width * 0.8, y + height * 0.7, 2, 10);
-      this.ctx.fillRect(x + width * 0.75, y + height * 0.73, 10, 2);
-    }
-  }
-  
-  blendColors(color1, color2, ratio) {
-    // Simple color blending
-    const r1 = parseInt(color1.substr(1, 2), 16);
-    const g1 = parseInt(color1.substr(3, 2), 16);
-    const b1 = parseInt(color1.substr(5, 2), 16);
-    
-    const r2 = parseInt(color2.substr(1, 2), 16);
-    const g2 = parseInt(color2.substr(3, 2), 16);
-    const b2 = parseInt(color2.substr(5, 2), 16);
-    
-    const r = Math.round(r1 + (r2 - r1) * ratio);
-    const g = Math.round(g1 + (g2 - g1) * ratio);
-    const b = Math.round(b1 + (b2 - b1) * ratio);
-    
-    return `rgb(${r}, ${g}, ${b})`;
+    this.ctx.restore();
   }
   
   render() {
