@@ -152,8 +152,12 @@ class GravestoneMemoryGame {
     ];
     
     const positions = [
-      { x: 100, y: 200 }, { x: 300, y: 150 }, { x: 500, y: 200 },
-      { x: 700, y: 180 }, { x: 200, y: 400 }, { x: 600, y: 420 }
+      { x: 80, y: 200 },   // Gravestone 1
+      { x: 200, y: 200 },  // Gravestone 2
+      { x: 320, y: 200 },  // Gravestone 3
+      { x: 440, y: 200 },  // Gravestone 4
+      { x: 560, y: 200 },  // Gravestone 5
+      { x: 680, y: 200 }   // Gravestone 6
     ];
     
     for (let i = 0; i < 6; i++) {
