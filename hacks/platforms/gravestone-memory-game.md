@@ -112,12 +112,12 @@ class GravestoneMemoryGame {
   
   initializeGravestones() {
     const colors = [
-      { normal: '#8B4513', glow: '#FFD700', note: 261.63 }, // Brown/Gold - C4
-      { normal: '#A0522D', glow: '#FF6347', note: 293.66 }, // Saddle Brown/Tomato - D4
-      { normal: '#654321', glow: '#32CD32', note: 329.63 }, // Dark Brown/Lime - E4
-      { normal: '#8B7355', glow: '#00CED1', note: 349.23 }, // Dark Khaki/Dark Turquoise - F4
-      { normal: '#A0522D', glow: '#9370DB', note: 392.00 }, // Saddle Brown/Medium Purple - G4
-      { normal: '#696969', glow: '#FF1493', note: 440.00 }  // Dim Gray/Deep Pink - A4
+      { normal: '#8B4513', glow: '#FFD700', note: 261.63 }, 
+      { normal: '#A0522D', glow: '#FF6347', note: 391.995 }, 
+      { normal: '#654321', glow: '#32CD32', note: 311.13 },
+      { normal: '#8B7355', glow: '#00CED1', note: 369.994 },
+      { normal: '#A0522D', glow: '#9370DB', note: 261.63 }, 
+      { normal: '#696969', glow: '#FF1493', note: 277.18} 
     ];
     
     const positions = [
