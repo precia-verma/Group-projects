@@ -17,8 +17,8 @@ permalink: /spookyforest
   const ctx = canvas.getContext('2d'); // Get the 2D drawing context
   const backgroundImg = new Image(); // Create a new Image for the background
   const spriteImg = new Image(); // Create a new Image for the sprite
-  backgroundImg.src = 'images/platformer/backgrounds/Cemetery.png'; // Set background image source from front matter
- spriteImg.src = 'images/platformer/sprites/ghost.png'; // Set sprite image source from front matter
+  backgroundImg.src = 'images/platformer/backgrounds/spookyforestforgame.png'; // Set background image source from front matter
+ spriteImg.src = 'images/platformer/sprites/gravestone_1.png'; // Set sprite image source from front matter
 
   let imagesLoaded = 0; // Track number of loaded images
   backgroundImg.onload = function() { // When background image loads
