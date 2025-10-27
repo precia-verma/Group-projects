@@ -2,7 +2,7 @@
 layout: base
 title: Background with Object 
 description: Use JavaScript to have an in motion background.
-sprite: images/platformer/sprites/ghost.png
+sprite: images/platformer/sprites/lonelypsychodude.png
 background: images/platformer/backgrounds/Cemetery.png
 permalink: /dead
 ---
@@ -18,7 +18,7 @@ permalink: /dead
   const backgroundImg = new Image(); // Create a new Image for the background
   const spriteImg = new Image(); // Create a new Image for the sprite
   backgroundImg.src = 'images/platformer/backgrounds/Cemetery.png'; // Set background image source from front matter
- spriteImg.src = 'images/platformer/sprites/ghost.png'; // Set sprite image source from front matter
+ spriteImg.src = 'images/platformer/sprites/lonelypsychodude.png'; // Set sprite image source from front matter
 
   let imagesLoaded = 0; // Track number of loaded images
   backgroundImg.onload = function() { // When background image loads
