@@ -2,30 +2,23 @@
 layout: base
 title: Background with Object 
 description: Use JavaScript to have an in motion background.
-sprite: images/platformer/sprites/lonelypsychodude.png
-background: images/platformer/backgrounds/Cemetery.png
-permalink: /dead
+sprite: images/platformer/sprites/gravestone_1.png
+background: images/platformer/backgrounds/spookyforestforgame.png
+permalink: /backup
 ---
 
-<style>
-#world {
-    border: 1px solid black;
-    width: 800px;
-    height: 400px;
-}
-</style>
 
-<canvas id="world" width="800" height="400"></canvas> <!-- Canvas element for rendering the game world -->
+<canvas id="world"></canvas> <!-- Canvas element for rendering the game world -->
 
 <script>
   window.onload = function() {
-    // Initialize game when window loads
-    const canvas = document.getElementById("world"); // Get the canvas element
+}
+  const canvas = document.getElementById("world"); // Get the canvas element
   const ctx = canvas.getContext('2d'); // Get the 2D drawing context
   const backgroundImg = new Image(); // Create a new Image for the background
   const spriteImg = new Image(); // Create a new Image for the sprite
-  backgroundImg.src = 'images/platformer/backgrounds/Cemetery.png'; // Set background image source from front matter
- spriteImg.src = 'images/platformer/sprites/lonelypsychodude.png'; // Set sprite image source from front matter
+  backgroundImg.src = 'images/platformer/backgrounds/spookyforestforgame.png'; // Set background image source from front matter
+ spriteImg.src = 'images/platformer/sprites/gravestone_1.png'; // Set sprite image source from front matter
 
   let imagesLoaded = 0; // Track number of loaded images
   backgroundImg.onload = function() { // When background image loads
@@ -53,10 +46,7 @@ permalink: /dead
       }
       update() {} // Update object state (empty for base)
       draw(ctx) { // Draw object on canvas
-        // Use imageSmoothingEnabled = false to keep GIF pixels crisp
-        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        ctx.imageSmoothingEnabled = true;
       }
     }
 
@@ -75,61 +65,20 @@ permalink: /dead
       }
     }
 
-    // Player class with WASD controls
+    // Player class, animates sprite up and down
     class Player extends GameObject {
       constructor(image, gameWorld) {
-        const width = image.naturalWidth / 8; // Set sprite width (even smaller)
-        const height = image.naturalHeight / 8; // Set sprite height (even smaller)
+        const width = image.naturalWidth / 2; // Set sprite width
+        const height = image.naturalHeight / 2; // Set sprite height
         const x = (gameWorld.width - width) / 2; // Center horizontally
         const y = (gameWorld.height - height) / 2; // Center vertically
         super(image, width, height, x, y); // Call base constructor
-        this.moveSpeed = 5; // Movement speed
-        this.keys = { w: false, a: false, s: false, d: false }; // Track key states
-        
-        // Add key event listeners
-        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        window.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        this.baseY = y; // Store base Y position
+        this.frame = 0; // Animation frame counter
       }
-
-      handleKeyDown(e) {
-        // Update key states on keydown
-        // Prevent the browser from scrolling when pressing WASD
-        const key = e.key.toLowerCase();
-        if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-          e.preventDefault();
-        }
-        switch(key) {
-          case 'w': this.keys.w = true; break;
-          case 'a': this.keys.a = true; break;
-          case 's': this.keys.s = true; break;
-          case 'd': this.keys.d = true; break;
-        }
-      }
-
-      handleKeyUp(e) {
-        // Update key states on keyup
-        const key = e.key.toLowerCase();
-        if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-          e.preventDefault();
-        }
-        switch(key) {
-          case 'w': this.keys.w = false; break;
-          case 'a': this.keys.a = false; break;
-          case 's': this.keys.s = false; break;
-          case 'd': this.keys.d = false; break;
-        }
-      }
-
       update() {
-        // Move horizontally based on key states (lock vertical position)
-        if (this.keys.a) this.x -= this.moveSpeed;
-        if (this.keys.d) this.x += this.moveSpeed;
-
-        // Keep sprite within canvas horizontal bounds
-        this.x = Math.max(0, Math.min(this.x, canvas.width - this.width));
-
-        // Lock the vertical position to the vertical center of the canvas
-        this.y = (canvas.height - this.height) / 2;
+        // this.y = this.baseY + Math.sin(this.frame * 0.05) * 20; // Animate up and down
+        // this.frame++; // Increment frame
       }
     }
 
