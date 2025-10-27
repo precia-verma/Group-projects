@@ -108,7 +108,11 @@ permalink: /dead
 
       handleKeyUp(e) {
         // Update key states on keyup
-        switch(e.key.toLowerCase()) {
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+          e.preventDefault();
+        }
+        switch(key) {
           case 'w': this.keys.w = false; break;
           case 'a': this.keys.a = false; break;
           case 's': this.keys.s = false; break;
@@ -117,15 +121,15 @@ permalink: /dead
       }
 
       update() {
-        // Move based on key states
-        if (this.keys.w) this.y -= this.moveSpeed;
-        if (this.keys.s) this.y += this.moveSpeed;
+        // Move horizontally based on key states (lock vertical position)
         if (this.keys.a) this.x -= this.moveSpeed;
         if (this.keys.d) this.x += this.moveSpeed;
 
-        // Keep sprite within canvas bounds
+        // Keep sprite within canvas horizontal bounds
         this.x = Math.max(0, Math.min(this.x, canvas.width - this.width));
-        this.y = Math.max(0, Math.min(this.y, canvas.height - this.height));
+
+        // Lock the vertical position to the vertical center of the canvas
+        this.y = (canvas.height - this.height) / 2;
       }
     }
 
