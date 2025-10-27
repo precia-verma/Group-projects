@@ -93,7 +93,12 @@ permalink: /dead
 
       handleKeyDown(e) {
         // Update key states on keydown
-        switch(e.key.toLowerCase()) {
+        // Prevent the browser from scrolling when pressing WASD
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+          e.preventDefault();
+        }
+        switch(key) {
           case 'w': this.keys.w = true; break;
           case 'a': this.keys.a = true; break;
           case 's': this.keys.s = true; break;
