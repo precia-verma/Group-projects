@@ -54,7 +54,7 @@ permalink: /spookyforest
     class Background extends GameObject {
       constructor(image, gameWorld) {
         // Fill entire canvas with background image
-        super(image, gameWorld.width, gameWorld.height, 0, 0, 0.1);
+        super(image, gameWorld.width, gameWorld.height, 0, 0, 0);
       }
       update() {
         this.x = (this.x - this.speed) % this.width; // Move background left, wrap around
