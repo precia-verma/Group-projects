@@ -1,7 +1,7 @@
 ---
 layout: base
 title: Background with Object 
-description: Use JavaScript to have an in motion background.
+description: Use Javascript to have an in motion
 sprite: images/platformer/sprites/gravestone_1.png
 background: images/platformer/backgrounds/spookyforestforgame.png
 permalink: /spookyforest
@@ -29,6 +29,11 @@ permalink: /spookyforest
     imagesLoaded++; // Increment loaded count
     startGameWorld(); // Try to start the game
   };
+
+  // Load different sprite images
+  const sprite2Img = new Image();
+  sprite2Img.src = 'images/platformer/sprites/gravestone_2.png';
+
 
   function startGameWorld() {
     if (imagesLoaded < 2) return; // Wait until both images are loaded
@@ -67,11 +72,11 @@ permalink: /spookyforest
 
     // Player class, animates sprite up and down
     class Player extends GameObject {
-      constructor(image, gameWorld) {
+      constructor(image, gameWorld, customX, customY) {
         const width = image.naturalWidth / 2; // Set sprite width
         const height = image.naturalHeight / 2; // Set sprite height
-        const x = (gameWorld.width - width) / 2; // Center horizontally
-        const y = (gameWorld.height - height) / 2; // Center vertically
+        const x = customX !== undefined ? customX : (gameWorld.width - width) / 2; // Use custom X or center horizontally
+        const y = customY !== undefined ? customY : (gameWorld.height - height) / 2; // Use custom Y or center vertically
         super(image, width, height, x, y); // Call base constructor
         this.baseY = y; // Store base Y position
         this.frame = 0; // Animation frame counter
@@ -100,7 +105,8 @@ permalink: /spookyforest
 
         this.gameObjects = [
          new Background(backgroundImg, this), // Add background object
-         new Player(spriteImg, this) // Add player object
+         new Player(spriteImg, this, 120, this.height / 2 - 60), // First gravestone - same position
+         new Player(sprite2Img, this, 330, this.height / 2 - 60) // Second gravestone - moved a bit more right
         ];
       }
       gameLoop() {
