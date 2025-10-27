@@ -54,7 +54,7 @@ permalink: /spookyforest
     class Background extends GameObject {
       constructor(image, gameWorld) {
         // Fill entire canvas with background image
-        super(image, gameWorld.width, gameWorld.height, 0, 0, 0.1);
+        super(image, gameWorld.width, gameWorld.height, 0, 0, 0);
       }
       update() {
         this.x = (this.x - this.speed) % this.width; // Move background left, wrap around
@@ -77,8 +77,8 @@ permalink: /spookyforest
         this.frame = 0; // Animation frame counter
       }
       update() {
-        this.y = this.baseY + Math.sin(this.frame * 0.05) * 20; // Animate up and down
-        this.frame++; // Increment frame
+        // this.y = this.baseY + Math.sin(this.frame * 0.05) * 20; // Animate up and down
+        // this.frame++; // Increment frame
       }
     }
 
