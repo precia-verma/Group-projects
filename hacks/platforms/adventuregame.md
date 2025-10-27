@@ -77,8 +77,8 @@ permalink: /spookyforest
         this.frame = 0; // Animation frame counter
       }
       update() {
-        this.y = this.baseY + Math.sin(this.frame * 0.05) * 20; // Animate up and down
-        this.frame++; // Increment frame
+        // this.y = this.baseY + Math.sin(this.frame * 0.05) * 20; // Animate up and down
+        // this.frame++; // Increment frame
       }
     }
 
