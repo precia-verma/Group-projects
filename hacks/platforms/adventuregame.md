@@ -108,9 +108,9 @@ permalink: /spookyforest
 
         this.gameObjects = [
          new Background(backgroundImg, this), // Add background object
-         new Player(spriteImg, this, 120, this.height / 2 - 60), // First gravestone - same position
+         new Player(spriteImg, this, 150, this.height / 2 - 60), // First gravestone - same position
          new Player(sprite2Img, this, 330, this.height / 2 - 60), // Second gravestone - moved a bit more right
-         new Player(sprite3Img, this, 440, this.height / 2 - 60) // Third gravestone - right next to gravestone 2
+         new Player(sprite3Img, this, 496, this.height / 2 - 60) // Third gravestone - right next to gravestone 2
         ];
       }
       gameLoop() {
