@@ -37,6 +37,8 @@ permalink: /spookyforest
   const sprite3Img = new Image();
   sprite3Img.src = 'images/platformer/sprites/gravestone_3.png';
 
+const sprite4Img = new Image();
+  sprite4Img.src = 'images/platformer/sprites/gravestone_4.png';
 
   function startGameWorld() {
     if (imagesLoaded < 2) return; // Wait until both images are loaded
@@ -108,9 +110,10 @@ permalink: /spookyforest
 
         this.gameObjects = [
          new Background(backgroundImg, this), // Add background object
-         new Player(spriteImg, this, 150, this.height / 2 - 60), // First gravestone - same position
-         new Player(sprite2Img, this, 330, this.height / 2 - 60), // Second gravestone - moved a bit more right
-         new Player(sprite3Img, this, 496, this.height / 2 - 60) // Third gravestone - right next to gravestone 2
+         new Player(spriteImg, this, 150, this.height / 2 - 60), // First gravestone 
+         new Player(sprite2Img, this, 330, this.height / 2 - 60), // Second gravestone 
+         new Player(sprite3Img, this, 496, this.height / 2 - 60) // Third gravestone 
+         new Player(sprite4Img, this, 600, this.height / 2 - 60) // Fourth gravestone
         ];
       }
       gameLoop() {
