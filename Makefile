@@ -4,7 +4,10 @@ REPO_NAME ?= student
 LOG_FILE = /tmp/jekyll$(PORT).log
 
 SHELL := /bin/bash
-.SHELLFLAGS := -e # Exceptions will stop make, works on MacOS
+## Ensure the shell is invoked with -c so bash receives the command string
+## -e : exit immediately if a command exits with a non-zero status
+## -c : read commands from the following command string (required by make)
+.SHELLFLAGS := -e -c
 
 # Phony Targets, makefile housekeeping for below definitions
 .PHONY: default server issues convert clean stop
