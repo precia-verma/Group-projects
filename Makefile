@@ -3,8 +3,11 @@ PORT ?= 4600
 REPO_NAME ?= student
 LOG_FILE = /tmp/jekyll$(PORT).log
 
-SHELL = /bin/bash -c
-.SHELLFLAGS = -e # Exceptions will stop make, works on MacOS
+SHELL := /bin/bash
+## Ensure the shell is invoked with -c so bash receives the command string
+## -e : exit immediately if a command exits with a non-zero status
+## -c : read commands from the following command string (required by make)
+.SHELLFLAGS := -e -c
 
 # Phony Targets, makefile housekeeping for below definitions
 .PHONY: default server issues convert clean stop
@@ -102,18 +105,18 @@ cspserver: stop cspconvert
 	@@until [ -f $(LOG_FILE) ]; do sleep 1; done
 
 # Convert .ipynb files to Markdown with front matter
-convert: $(MARKDOWN_FILES)
-cspconvert: $(CSP_MARKDOWN_FILES)
-
-# Convert .ipynb files to Markdown with front matter, preserving directory structure
-$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md: _notebooks/%.ipynb
+		@echo "Starting server..."
+		@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) > $(LOG_FILE) 2>&1 & \
+			PID=$$!; \
+			echo "Server PID: $$PID"
+		@until [ -f $(LOG_FILE) ]; do sleep 1; done
 	@mkdir -p $(@D)
 	@python3 -c "from scripts.convert_notebooks import convert_notebooks; convert_notebooks()"
-
-$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md: _notebooks/CSP/%.ipynb
-	@echo "Converting source $< to destination $@"
-	@mkdir -p $(@D)
-	@python3 -c 'import sys; from scripts.convert_notebooks import convert_single_notebook; convert_single_notebook(sys.argv[1])' "$<"
+		@echo "Starting server..."
+		@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) > $(LOG_FILE) 2>&1 & \
+			PID=$$!; \
+			echo "Server PID: $$PID"
+		@until [ -f $(LOG_FILE) ]; do sleep 1; done
 
 # Clean up project derived files, to avoid run issues stop is dependency
 clean: stop
@@ -132,10 +135,10 @@ clean: stop
 # Stop the server and kill processes
 stop:
 	@echo "Stopping server..."
-	@# kills process running on port $(PORT)
+		@lsof -ti :$(PORT) | xargs kill >/dev/null 2>&1 || true
 	@@lsof -ti :$(PORT) | xargs kill >/dev/null 2>&1 || true
 	@echo "Stopping logging process..."
-	@# kills previously running logging processes
+		@ps aux | awk -v log_file=$(LOG_FILE) '$$0 ~ "tail -f " log_file { print $$2 }' | xargs kill >/dev/null 2>&1 || true
 	@@ps aux | awk -v log_file=$(LOG_FILE) '$$0 ~ "tail -f " log_file { print $$2 }' | xargs kill >/dev/null 2>&1 || true
 	@# removes log
 	@rm -f $(LOG_FILE)

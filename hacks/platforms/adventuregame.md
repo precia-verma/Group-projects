@@ -37,6 +37,10 @@ permalink: /spookyforest
   sprite3Img.src = 'images/platformer/sprites/gravestone_3.png';
   const sprite4Img = new Image();
   sprite4Img.src = 'images/platformer/sprites/gravestone_4.png';
+  const sprite5Img = new Image();
+  sprite5Img.src = 'images/platformer/sprites/gravestone_5.png';
+  const sprite6Img = new Image();
+  sprite6Img.src = 'images/platformer/sprites/gravestone_6.png';
 
   function startGameWorld() {
     if (imagesLoaded < 2) return; // Wait until both images are loaded
@@ -111,7 +115,9 @@ permalink: /spookyforest
          new Player(spriteImg, this, 150, this.height / 2 - 60), // First gravestone 
          new Player(sprite2Img, this, 330, this.height / 2 - 60), // Second gravestone 
          new Player(sprite3Img, this, 496, this.height / 2 - 60), // Third gravestone 
-         new Player(sprite4Img, this, 670, this.height / 2 - 60) // Fourth gravestone
+         new Player(sprite4Img, this, 670, this.height / 2 - 60), // Fourth gravestone
+         new Player(sprite5Img, this, 835, this.height / 2 - 60), // Fifth gravestone
+         new Player(sprite6Img, this, 999, this.height / 2 - 60) // Sixth gravestone
         ];
       }
       gameLoop() {
