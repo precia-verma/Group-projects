@@ -42,8 +42,17 @@ permalink: /spookyforest
   const sprite6Img = new Image();
   sprite6Img.src = 'images/platformer/sprites/gravestone_6.png';
 
+
+
   function startGameWorld() {
     if (imagesLoaded < 2) return; // Wait until both images are loaded
+
+    const NOTE_FREQ = {
+  "e4": 329.63, "g4": 392.00, "d#4": 311.13,
+  "f#4": 369.99, "c4": 261.63, "f4": 349.23, "c#4": 277.18
+};
+const GRAVE_TO_NOTE = { 1:"e4", 2:"g4", 3:"d#4", 4:"f#4", 5:"c4", 6:"f4" };
+const SUCCESS_NOTE = "c#4";
 
     // Base class for all game objects
     class GameObject {
