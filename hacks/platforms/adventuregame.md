@@ -7,7 +7,6 @@ background: images/platformer/backgrounds/spookyforestforgame.png
 permalink: /spookyforest
 ---
 
-<button id="startBtn">Start Game</button>
 <canvas id="world"></canvas>
 
 <script>
@@ -275,17 +274,7 @@ permalink: /spookyforest
     }
 
     const world = new GameWorld(backgroundImg, spriteImg);
-
-const startBtn = document.getElementById("startBtn");
-startBtn.addEventListener("click", async () => {
-  startBtn.style.display = "none";
-  initAudio();
-  world.audioUnlocked = true;
-  world.round = 1;
-  await world.playRound(); 
-  world.start();
-});
-
+    world.start();
   }
 </script>
 
