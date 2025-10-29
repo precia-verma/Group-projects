@@ -155,7 +155,7 @@ permalink: /spookyforest
       }
     }
 
-    class GameWorld {
+class GameWorld {
   static gameSpeed = 5;
 
   constructor(backgroundImg, spriteImg) {
@@ -172,7 +172,7 @@ permalink: /spookyforest
     this.canvas.style.left = `0px`;
     this.canvas.style.top  = `${(window.innerHeight - this.height) / 2}px`;
 
-    
+    // stones
     this.players = [
       new Player(spriteImg,  this, 150, this.height / 2 - 60, 1, GRAVE_TO_NOTE[1]),
       new Player(sprite2Img, this, 330, this.height / 2 - 60, 2, GRAVE_TO_NOTE[2]),
@@ -187,27 +187,22 @@ permalink: /spookyforest
       ...this.players
     ];
 
-    
+    // memory-game state
     this.sequence = [2, 4, 1, 6, 3, 5];
     this.acceptingInput = false;
     this.inputIndex = 0;
-    this.audioUnlocked = false; 
+    this.audioUnlocked = false;
 
-    
+    // clicks
     this.canvas.addEventListener('click', async (ev) => {
       const rect = this.canvas.getBoundingClientRect();
       const x = ev.clientX - rect.left;
       const y = ev.clientY - rect.top;
 
-      
+      // first click: unlock audio and play pattern
       if (!this.audioUnlocked) {
         initAudio();
         this.audioUnlocked = true;
-
-        // tiny “start” ping before the pattern
-        // playNote(SUCCESS_NOTE, 140);
-        // await this.sleep(120);
-
         await this.playSequence();
         return;
       }
@@ -233,17 +228,17 @@ permalink: /spookyforest
           playNote(SUCCESS_NOTE, 240);
         }
       } else {
-        // wrong answer → use your FAIL_NOTE here
+        // failure jingle
         this.acceptingInput = false;
         playNote(FAIL_NOTE, 180);
         await this.sleep(90);
         playNote(FAIL_NOTE, 220);
-        // click again to replay
       }
     });
   }
 
   sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+
   async flashAndPlayById(id, ms = 620) {
     const p = this.players.find(pl => pl.id === id);
     if (!p) return;
@@ -251,6 +246,7 @@ permalink: /spookyforest
     playNote(p.note, ms - 80);
     await this.sleep(ms);
   }
+
   async playSequence() {
     this.acceptingInput = false;
     this.inputIndex = 0;
@@ -261,6 +257,7 @@ permalink: /spookyforest
     }
     this.acceptingInput = true;
   }
+
   gameLoop() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     for (const obj of this.gameObjects) {
@@ -269,5 +266,13 @@ permalink: /spookyforest
     }
     requestAnimationFrame(this.gameLoop.bind(this));
   }
+
   start() { this.gameLoop(); }
-}
+} // ← end of class GameWorld
+
+// These must be OUTSIDE the class, but still inside startGameWorld():
+const world = new GameWorld(backgroundImg, spriteImg);
+world.start();
+
+} // ← end of function startGameWorld()
+</script>
