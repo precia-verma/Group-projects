@@ -7,16 +7,6 @@ background: images/platformer/backgrounds/spookyforestforgame.png
 permalink: /spookyforest
 ---
 
-
-<---
-layout: base
-title: Background with Object 
-description: Use Javascript to have an in motion
-sprite: images/platformer/sprites/gravestone_1.png
-background: images/platformer/backgrounds/spookyforestforgame.png
-permalink: /spookyforest
----
-
 <button id="startBtn">Start Game</button>
 <canvas id="world"></canvas>
 
