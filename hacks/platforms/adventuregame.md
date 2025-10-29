@@ -156,129 +156,118 @@ permalink: /spookyforest
     }
 
     class GameWorld {
-      static gameSpeed = 5;
+  static gameSpeed = 5;
 
-      constructor(backgroundImg, spriteImg) {
-        
-        this.canvas = document.getElementById("world");
-        this.ctx = this.canvas.getContext('2d');
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        this.canvas.width  = this.width;
-        this.canvas.height = this.height;
-        this.canvas.style.width  = `${this.width}px`;   
-        this.canvas.style.height = `${this.height}px`;  
-        this.canvas.style.position = 'absolute';
-        this.canvas.style.left = `0px`;                 
-        this.canvas.style.top  = `${(window.innerHeight - this.height) / 2}px`; 
+  constructor(backgroundImg, spriteImg) {
+    // canvas sizing
+    this.canvas = document.getElementById("world");
+    this.ctx = this.canvas.getContext('2d');
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.canvas.width  = this.width;
+    this.canvas.height = this.height;
+    this.canvas.style.width  = `${this.width}px`;
+    this.canvas.style.height = `${this.height}px`;
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.left = `0px`;
+    this.canvas.style.top  = `${(window.innerHeight - this.height) / 2}px`;
 
-      
-        this.players = [
-          new Player(spriteImg,  this, 150, this.height / 2 - 60, 1, GRAVE_TO_NOTE[1]),
-          new Player(sprite2Img, this, 330, this.height / 2 - 60, 2, GRAVE_TO_NOTE[2]),
-          new Player(sprite3Img, this, 496, this.height / 2 - 60, 3, GRAVE_TO_NOTE[3]),
-          new Player(sprite4Img, this, 670, this.height / 2 - 60, 4, GRAVE_TO_NOTE[4]),
-          new Player(sprite5Img, this, 835, this.height / 2 - 60, 5, GRAVE_TO_NOTE[5]),
-          new Player(sprite6Img, this, 999, this.height / 2 - 60, 6, GRAVE_TO_NOTE[6])
-        ];
+    
+    this.players = [
+      new Player(spriteImg,  this, 150, this.height / 2 - 60, 1, GRAVE_TO_NOTE[1]),
+      new Player(sprite2Img, this, 330, this.height / 2 - 60, 2, GRAVE_TO_NOTE[2]),
+      new Player(sprite3Img, this, 496, this.height / 2 - 60, 3, GRAVE_TO_NOTE[3]),
+      new Player(sprite4Img, this, 670, this.height / 2 - 60, 4, GRAVE_TO_NOTE[4]),
+      new Player(sprite5Img, this, 835, this.height / 2 - 60, 5, GRAVE_TO_NOTE[5]),
+      new Player(sprite6Img, this, 999, this.height / 2 - 60, 6, GRAVE_TO_NOTE[6])
+    ];
 
-        this.gameObjects = [
-          new Background(backgroundImg, this),
-          ...this.players
-        ];
+    this.gameObjects = [
+      new Background(backgroundImg, this),
+      ...this.players
+    ];
 
+    
+    this.sequence = [2, 4, 1, 6, 3, 5];
+    this.acceptingInput = false;
+    this.inputIndex = 0;
+    this.audioUnlocked = false; 
 
-        this.sequence = [2, 4, 1, 6, 3, 5];
-       this.acceptingInput = false;
-       playNote(FAIL_NOTE, 500); 
-       await this.sleep(500);
-
-
-        
-        this.canvas.addEventListener('click', async (ev) => {
-          const rect = this.canvas.getBoundingClientRect();
-          const x = ev.clientX - rect.left;
-          const y = ev.clientY - rect.top;
-
-         
-          if (!this.audioUnlocked) {
-            initAudio();       
-            this.audioUnlocked = true;
-            await this.playSequence();
-            return;
-          }
-
-          if (!this.acceptingInput) return;
-
-          const hit = this.players.find(p => p.containsPoint(x, y));
-          if (!hit) return;
-
-         
-          hit.glow(420);
-          playNote(hit.note, 420);
-
-          
-          const expectedId = this.sequence[this.inputIndex];
-          if (hit.id === expectedId) {
-            this.inputIndex++;
-            
-            if (this.inputIndex === this.sequence.length) {
-              this.acceptingInput = false;
-            
-              playNote(SUCCESS_NOTE, 160);
-              await this.sleep(150);
-              playNote(SUCCESS_NOTE, 200);
-              await this.sleep(190);
-              playNote(SUCCESS_NOTE, 240);
-            
-            }
-          } else {
-          
-            this.acceptingInput = false;
-            playNote("c4", 170);
-            await this.sleep(90);
-            playNote("c4", 210);
-           
-          }
-        });
-      }
-
-     
-      sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
-
-      async flashAndPlayById(id, ms = 620) {
-        const p = this.players.find(pl => pl.id === id);
-        if (!p) return;
-        p.glow(ms - 60);
-        playNote(p.note, ms - 80);
-        await this.sleep(ms);
-      }
+    
+    this.canvas.addEventListener('click', async (ev) => {
+      const rect = this.canvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
 
       
-      async playSequence() {
+      if (!this.audioUnlocked) {
+        initAudio();
+        this.audioUnlocked = true;
+
+        // tiny “start” ping before the pattern
+        // playNote(SUCCESS_NOTE, 140);
+        // await this.sleep(120);
+
+        await this.playSequence();
+        return;
+      }
+
+      if (!this.acceptingInput) return;
+
+      const hit = this.players.find(p => p.containsPoint(x, y));
+      if (!hit) return;
+
+      hit.glow(420);
+      playNote(hit.note, 420);
+
+      const expectedId = this.sequence[this.inputIndex];
+      if (hit.id === expectedId) {
+        this.inputIndex++;
+        if (this.inputIndex === this.sequence.length) {
+          this.acceptingInput = false;
+          // success jingle
+          playNote(SUCCESS_NOTE, 160);
+          await this.sleep(150);
+          playNote(SUCCESS_NOTE, 200);
+          await this.sleep(190);
+          playNote(SUCCESS_NOTE, 240);
+        }
+      } else {
+        // wrong answer → use your FAIL_NOTE here
         this.acceptingInput = false;
-        this.inputIndex = 0;
-        await this.sleep(300); 
-        for (const id of this.sequence) {
-          await this.flashAndPlayById(id, 620);
-          await this.sleep(180);
-        }
-        this.acceptingInput = true;
+        playNote(FAIL_NOTE, 180);
+        await this.sleep(90);
+        playNote(FAIL_NOTE, 220);
+        // click again to replay
       }
-
-      
-      gameLoop() {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-        for (const obj of this.gameObjects) {
-          obj.update();
-          obj.draw(this.ctx);
-        }
-        requestAnimationFrame(this.gameLoop.bind(this));
-      }
-      start() { this.gameLoop(); }
-    }
-
-    const world = new GameWorld(backgroundImg, spriteImg);
-    world.start();
+    });
   }
-</script>
+
+  sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+  async flashAndPlayById(id, ms = 620) {
+    const p = this.players.find(pl => pl.id === id);
+    if (!p) return;
+    p.glow(ms - 60);
+    playNote(p.note, ms - 80);
+    await this.sleep(ms);
+  }
+  async playSequence() {
+    this.acceptingInput = false;
+    this.inputIndex = 0;
+    await this.sleep(300);
+    for (const id of this.sequence) {
+      await this.flashAndPlayById(id, 620);
+      await this.sleep(180);
+    }
+    this.acceptingInput = true;
+  }
+  gameLoop() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    for (const obj of this.gameObjects) {
+      obj.update();
+      obj.draw(this.ctx);
+    }
+    requestAnimationFrame(this.gameLoop.bind(this));
+  }
+  start() { this.gameLoop(); }
+}
