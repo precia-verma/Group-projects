@@ -44,7 +44,7 @@ Welcome LxD Coders!
     <a href="https://precia-verma.github.io/Group-projects/front-page/" style="text-decoration: none;">
           <div style="background: linear-gradient(135deg,#85d4b7 0%, #b19cd8 50%, #ffb3c1 100%); color: #ffffff; padding: 10px 20px; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
               Tools Setup Car Game
-          </div>
+        </div>
      </a>
 <a href="https://precia-verma.github.io/Group-projects/mansion2" style="background-color: #0a2c22ff; color: #a0957eff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
     Spooky Gravestone Game
