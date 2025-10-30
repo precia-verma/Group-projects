@@ -22,7 +22,11 @@
   let playerSpritesLoaded = 0;
   let currentSpriteIndex = 0;
   let spriteAnimationCounter = 0;
+<<<<<<< HEAD
+  const spriteAnimationSpeed = 10; // Change sprite every 10 frames when moving (slower = smoother)
+=======
   const spriteAnimationSpeed = 12; // Change sprite every 8 frames when moving
+>>>>>>> 2439fb6aafc3d4f6ea2093b3f07c0b7c18979964
 
   // Player character
   const player = {
@@ -433,11 +437,15 @@
     player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 
     // Animate sprite if moving
-    if (player.isMoving) {
+    if (player.isMoving && playerSprites.length === 6) {
       spriteAnimationCounter++;
       if (spriteAnimationCounter >= spriteAnimationSpeed) {
         spriteAnimationCounter = 0;
-        currentSpriteIndex = (currentSpriteIndex + 1) % playerSprites.length;
+        currentSpriteIndex = (currentSpriteIndex + 1) % 6; // Always use 6 frames
+        // Ensure index stays in valid range
+        if (currentSpriteIndex < 0 || currentSpriteIndex >= 6) {
+          currentSpriteIndex = 0;
+        }
       }
     } else {
       // Reset to first frame when not moving
@@ -489,20 +497,26 @@
 
   function drawPlayer() {
     // Draw player sprite if loaded, otherwise use fallback circle
-    if (playerSprites.length > 0 && playerSprites[currentSpriteIndex]) {
+    if (playerSprites.length === 6 && playerSprites[currentSpriteIndex]) {
       const sprite = playerSprites[currentSpriteIndex];
       
       // Disable image smoothing for crisp pixel art rendering
       ctx.imageSmoothingEnabled = false;
       
+      // Ensure we have a valid sprite index
+      const safeIndex = Math.max(0, Math.min(currentSpriteIndex, playerSprites.length - 1));
+      const safeSprite = playerSprites[safeIndex];
+      
       // Draw the sprite centered on player position
-      ctx.drawImage(
-        sprite,
-        player.x,
-        player.y,
-        player.width,
-        player.height
-      );
+      if (safeSprite && safeSprite.complete && safeSprite.naturalWidth > 0) {
+        ctx.drawImage(
+          safeSprite,
+          player.x,
+          player.y,
+          player.width,
+          player.height
+        );
+      }
     } else {
       // Fallback: Draw player as a circle with outline
       ctx.fillStyle = player.color;
