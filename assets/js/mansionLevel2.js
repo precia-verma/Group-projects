@@ -254,8 +254,12 @@
     // Don't update player if prompt is showing
     if (showPrompt) return;
     
-    // Check if player is moving
+    // Check if player is moving and determine direction
     player.isMoving = keys.w || keys.s || keys.a || keys.d;
+    
+    // Determine direction for sprite selection
+    let isMovingLeft = keys.a || keys.w;  // Left or Up uses sprites 1-3
+    let isMovingRight = keys.d || keys.s;  // Right or Down uses sprites 4-6
     
     // Move player based on key presses
     if (keys.w) player.y -= player.speed;
@@ -268,7 +272,21 @@
       animationCounter++;
       if (animationCounter >= animationSpeed) {
         animationCounter = 0;
-        currentSpriteIndex = (currentSpriteIndex + 1) % totalSprites;
+        
+        // Determine which sprite range to use based on direction
+        if (isMovingRight && !isMovingLeft) {
+          // Moving right/down: cycle through sprites 3-5 (indices 3,4,5)
+          let frameInCycle = (currentSpriteIndex >= 3 && currentSpriteIndex <= 5) 
+            ? (currentSpriteIndex - 3 + 1) % 3 
+            : 0;
+          currentSpriteIndex = 3 + frameInCycle;
+        } else {
+          // Moving left/up: cycle through sprites 0-2 (indices 0,1,2)
+          let frameInCycle = (currentSpriteIndex >= 0 && currentSpriteIndex <= 2) 
+            ? (currentSpriteIndex + 1) % 3 
+            : 0;
+          currentSpriteIndex = frameInCycle;
+        }
       }
     } else {
       // Reset to first frame when idle
