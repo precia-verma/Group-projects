@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mansion Level 2 - DEBUG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid lime; /* Visual indicator */
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #333 !important; /* Ensure visible background */
+        }
+        #debug-panel {
+            position: absolute;
+            top: 250px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: lime;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            border: 2px solid lime;
+            z-index: 10000;
+            max-width: 300px;
+        }
+        #debug-panel div {
+            margin: 3px 0;
+        }
+        .status-good { color: lime; }
+        .status-bad { color: red; }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Canvas will be added here by the script -->
+    </div>
+    
+    <div id="debug-panel">
+        <div><strong>🎮 GAME DEBUG PANEL</strong></div>
+        <div>Canvas: <span id="canvas-status">Checking...</span></div>
+        <div>Canvas Size: <span id="canvas-size">-</span></div>
+        <div>Player Pos: <span id="player-pos">-</span></div>
+        <div>Keys Pressed: <span id="keys-active">None</span></div>
+        <div>Game Loop: <span id="loop-status">-</span></div>
+        <div>BG Loaded: <span id="bg-status">-</span></div>
+        <div><hr style="border-color: lime;"></div>
+        <div style="color: yellow;">Click canvas then press WASD</div>
+    </div>
+    
+    <script src="assets/js/mansionLevel2.js"></script>
+    
+    <script>
+        // Debug monitoring
+        let frameCount = 0;
+        
+        setInterval(() => {
+            const canvas = document.querySelector('canvas');
+            const canvasStatus = document.getElementById('canvas-status');
+            const canvasSizeEl = document.getElementById('canvas-size');
+            const playerPosEl = document.getElementById('player-pos');
+            const loopStatusEl = document.getElementById('loop-status');
+            
+            if (canvas) {
+                canvasStatus.innerHTML = '<span class="status-good">✓ Found</span>';
+                canvasSizeEl.textContent = `${canvas.width}x${canvas.height}`;
+                
+                // Try to access player info if available
+                if (window.debug_player_info) {
+                    playerPosEl.textContent = window.debug_player_info;
+                } else {
+                    playerPosEl.textContent = 'Not accessible';
+                }
+            } else {
+                canvasStatus.innerHTML = '<span class="status-bad">✗ Not Found</span>';
+            }
+            
+            frameCount++;
+            loopStatusEl.textContent = frameCount > 10 ? `Running (${frameCount})` : 'Starting...';
+        }, 500);
+        
+        // Key press monitoring
+        document.addEventListener('keydown', (e) => {
+            const keysEl = document.getElementById('keys-active');
+            keysEl.textContent = e.key.toUpperCase();
+            keysEl.style.color = 'cyan';
+            setTimeout(() => {
+                keysEl.style.color = 'white';
+            }, 200);
+        });
+        
+        // Click to focus reminder
+        setTimeout(() => {
+            const canvas = document.querySelector('canvas');
+            if (canvas) {
+                canvas.style.border = '5px solid yellow';
+                setTimeout(() => {
+                    canvas.style.border = 'none';
+                }, 2000);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

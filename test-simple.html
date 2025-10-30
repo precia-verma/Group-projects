@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Canvas Test</title>
+    <style>
+        body { margin: 0; background: #000; }
+        canvas { display: block; background: #333; border: 5px solid yellow; }
+        #info { color: white; padding: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>🎮 Canvas Rendering Test</h2>
+        <p>You should see:</p>
+        <ul>
+            <li>A gray canvas with yellow border</li>
+            <li>A large RED CIRCLE in the center</li>
+            <li>A moving BLUE SQUARE</li>
+        </ul>
+        <p id="status">Status: Initializing...</p>
+    </div>
+    <canvas id="testCanvas"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('testCanvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        
+        canvas.width = 800;
+        canvas.height = 600;
+        
+        let x = 100;
+        let y = 100;
+        let dx = 2;
+        let dy = 2;
+        
+        function draw() {
+            // Clear
+            ctx.fillStyle = '#333';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Big red circle (like player)
+            ctx.fillStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(400, 300, 50, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Moving blue square
+            ctx.fillStyle = '#00ffff';
+            ctx.fillRect(x, y, 40, 40);
+            
+            // Update position
+            x += dx;
+            y += dy;
+            if (x > canvas.width - 40 || x < 0) dx = -dx;
+            if (y > canvas.height - 40 || y < 0) dy = -dy;
+            
+            requestAnimationFrame(draw);
+        }
+        
+        status.textContent = 'Status: ✓ Rendering! If you see this, canvas works!';
+        status.style.color = 'lime';
+        
+        draw();
+    </script>
+</body>
+</html>

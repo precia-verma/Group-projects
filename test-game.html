@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mansion2 Debug Test</title>
+    <style>
+        body { margin: 0; background: #111; color: #fff; font-family: Arial; }
+        #debug { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 10px; z-index: 1000; }
+        canvas { display: block; background: #2b3a2b; }
+    </style>
+</head>
+<body>
+    <div id="debug">
+        <div>Canvas: <span id="canvasStatus">Not created</span></div>
+        <div>Player: <span id="playerPos">Unknown</span></div>
+        <div>Keys: <span id="keysPressed">None</span></div>
+    </div>
+    <script src="assets/js/mansionLevel2.js"></script>
+    <script>
+        // Debug panel updates
+        setInterval(() => {
+            const canvas = document.querySelector('canvas');
+            document.getElementById('canvasStatus').textContent = canvas ? `${canvas.width}x${canvas.height}` : 'Not found';
+        }, 1000);
+    </script>
+</body>
+</html>
