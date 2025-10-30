@@ -35,14 +35,23 @@
     isMoving: false
   };
 
-  // Cemetery area (adjust these coordinates based on your image)
+  // Cemetery area - proportional to screen size (will be updated on resize)
   // These coordinates define the grey brick rectangle area
   const cemetery = {
-    x: 500,
-    y: 200,
-    width: 700,
-    height: 450
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
   };
+  
+  // Function to update cemetery position based on canvas size
+  function updateCemeteryBounds() {
+    // Make cemetery proportional to screen (centered, about 50% of screen size)
+    cemetery.width = canvas.width * 0.5;
+    cemetery.height = canvas.height * 0.6;
+    cemetery.x = (canvas.width - cemetery.width) / 2;
+    cemetery.y = canvas.height * 0.15; // 15% from top
+  }
 
   // Keyboard state
   const keys = {
@@ -74,10 +83,14 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      updateCemeteryBounds(); // Update cemetery position on resize
     });
 
     ctx = canvas.getContext('2d');
     const onReady = typeof options.onReady === 'function' ? options.onReady : () => {};
+
+    // Initialize cemetery boundaries based on canvas size
+    updateCemeteryBounds();
 
     console.log('Initializing mansion game...', { canvas });
 
