@@ -1,4 +1,4 @@
-// Mansion Level 2 Game with WASD character movement
+// Mansion Level 2 Game with WASD character movement 
 (function () {
   const bgPaths = [
     'assets/images/mansion-untitled.jpeg',
