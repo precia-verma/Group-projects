@@ -46,7 +46,7 @@ Welcome LxD Coders!
               Tools Setup Car Game
           </div>
     </a>
-    <a href="https://precia-verma.github.io/Group-projects/mansion2" style="background-color: #365140ff; color: #544a37ff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+    <a href="https://precia-verma.github.io/Group-projects/mansion2" style="background-color: #071a0eff; color: #f4e6ccff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
     Spooky Forest Game 
     </a>
 </div>
