@@ -103,61 +103,82 @@
   }
 
   function loadPlayerSprites(onComplete) {
-    const spritePaths = [
-      'assets/images/character_frame_1.png',
-      'assets/images/character_frame_2.png',
-      'assets/images/character_frame_3.png',
-      'assets/images/character_frame_4.png',
-      'assets/images/character_frame_5.png',
-      'assets/images/character_frame_6.png'
-    ];
-
-    console.log('🎮 Loading player sprites...');
-    console.log('Expected paths:', spritePaths);
+    // Load the sprite sheet (which contains all 6 frames in a grid)
+    const spriteSheetPath = 'assets/images/character_frame_1.png'; // Using first frame as sprite sheet
     
-    spritePaths.forEach((path, index) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = function() {
-        console.log(`✓ Loaded sprite ${index + 1}/${spritePaths.length}:`, path, `(${img.width}x${img.height})`);
-        playerSprites[index] = img;
-        playerSpritesLoaded++;
+    console.log('🎮 Loading player sprite sheet...');
+    console.log('Sprite sheet path:', spriteSheetPath);
+    
+    const spriteSheet = new Image();
+    spriteSheet.crossOrigin = 'anonymous';
+    
+    spriteSheet.onload = function() {
+      console.log(`✓ Loaded sprite sheet: ${spriteSheetPath} (${spriteSheet.width}x${spriteSheet.height})`);
+      
+      // The sprite sheet has 6 characters in a 3x2 grid
+      const cols = 3;
+      const rows = 2;
+      const frameWidth = spriteSheet.width / cols;
+      const frameHeight = spriteSheet.height / rows;
+      
+      console.log(`Frame size: ${frameWidth}x${frameHeight}`);
+      
+      // Extract each frame from the sprite sheet
+      for (let i = 0; i < 6; i++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = frameWidth;
+        canvas.height = frameHeight;
+        const ctx = canvas.getContext('2d');
         
-        if (playerSpritesLoaded === spritePaths.length) {
-          console.log('🎉 All player sprites loaded successfully!');
-          console.log('Total sprites:', playerSprites.length);
-          if (onComplete) onComplete();
-        }
-      };
-      img.onerror = function() {
-        console.error(`❌ Failed to load sprite ${index + 1}:`, path);
-        console.error('   Check if file exists at:', window.location.origin + '/' + path);
+        // Calculate position in grid (reading left to right, top to bottom)
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const sx = col * frameWidth;
+        const sy = row * frameHeight;
         
-        // Create a fallback colored rectangle as sprite with the frame number
+        // Extract this frame from the sprite sheet
+        ctx.drawImage(
+          spriteSheet,
+          sx, sy, frameWidth, frameHeight,  // Source rectangle
+          0, 0, frameWidth, frameHeight     // Destination rectangle
+        );
+        
+        playerSprites[i] = canvas;
+        console.log(`✓ Extracted frame ${i + 1} from position (${col}, ${row})`);
+      }
+      
+      playerSpritesLoaded = 6;
+      console.log('🎉 All 6 frames extracted from sprite sheet!');
+      if (onComplete) onComplete();
+    };
+    
+    spriteSheet.onerror = function() {
+      console.error(`❌ Failed to load sprite sheet:`, spriteSheetPath);
+      
+      // Create fallback sprites
+      for (let i = 0; i < 6; i++) {
         const fallbackCanvas = document.createElement('canvas');
         fallbackCanvas.width = 80;
         fallbackCanvas.height = 80;
         const fallbackCtx = fallbackCanvas.getContext('2d');
         
-        // Draw a colored rectangle with frame number
-        fallbackCtx.fillStyle = `hsl(${index * 60}, 70%, 50%)`;
+        fallbackCtx.fillStyle = `hsl(${i * 60}, 70%, 50%)`;
         fallbackCtx.fillRect(0, 0, 80, 80);
         fallbackCtx.fillStyle = '#fff';
         fallbackCtx.font = 'bold 24px Arial';
         fallbackCtx.textAlign = 'center';
         fallbackCtx.textBaseline = 'middle';
-        fallbackCtx.fillText(`F${index + 1}`, 40, 40);
+        fallbackCtx.fillText(`F${i + 1}`, 40, 40);
         
-        playerSprites[index] = fallbackCanvas;
-        playerSpritesLoaded++;
-        
-        if (playerSpritesLoaded === spritePaths.length) {
-          console.log('⚠️  All player sprites loaded (some with fallbacks)');
-          if (onComplete) onComplete();
-        }
-      };
-      img.src = path;
-    });
+        playerSprites[i] = fallbackCanvas;
+      }
+      
+      playerSpritesLoaded = 6;
+      console.log('⚠️  Using fallback sprites');
+      if (onComplete) onComplete();
+    };
+    
+    spriteSheet.src = spriteSheetPath;
   }
 
   function loadBackground(index, onReady) {
