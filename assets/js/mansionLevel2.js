@@ -125,8 +125,7 @@
         if (key === 'y') {
           promptResponse = true;
           showPrompt = false;
-          showTransition = true;
-          transitionStartTime = Date.now();
+          window.location.href = 'https://precia-verma.github.io/Group-projects/spookyforest';
           console.log('Player chose to enter the cemetery');
         } else if (key === 'n') {
           promptResponse = false;
@@ -170,8 +169,7 @@
           clickY <= promptButtons.yes.y + promptButtons.yes.height) {
         promptResponse = true;
         showPrompt = false;
-        showTransition = true;
-        transitionStartTime = Date.now();
+        window.location.href = 'https://precia-verma.github.io/Group-projects/spookyforest';
         console.log('Player clicked YES to enter the cemetery');
       }
 
