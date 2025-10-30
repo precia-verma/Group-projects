@@ -28,8 +28,8 @@
   const player = {
     x: 50,
     y: 550,
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     speed: 3,
     color: '#ff6b6b',
     isMoving: false
@@ -377,15 +377,6 @@
         player.width,
         player.height
       );
-      
-      // Debug: Show current sprite number at the top
-      ctx.fillStyle = '#ffffff';
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 3;
-      ctx.font = 'bold 14px Arial';
-      const debugText = `Frame ${currentSpriteIndex + 1}/6`;
-      ctx.strokeText(debugText, player.x, player.y - 10);
-      ctx.fillText(debugText, player.x, player.y - 10);
     } else {
       // Fallback: Draw player as a circle with outline
       ctx.fillStyle = player.color;
