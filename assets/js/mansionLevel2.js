@@ -32,8 +32,8 @@
   const player = {
     x: 50,
     y: 550,
-    width: 120,
-    height: 120,
+    width: 250,
+    height: 250,
     speed: 3,
     color: '#ff6b6b',
     isMoving: false
