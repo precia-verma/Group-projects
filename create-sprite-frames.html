@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create 6 Sprite Frames</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #2a2a2a;
+            color: #fff;
+        }
+        h1 {
+            color: #4a9eff;
+            text-align: center;
+        }
+        .instructions {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .upload-section {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        #spriteInput {
+            margin: 20px 0;
+            padding: 10px;
+            background: #4a4a4a;
+            border: 2px solid #4a9eff;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .frames-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .frame-box {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #4a9eff;
+            background: rgba(255, 255, 255, 0.1);
+            max-width: 100%;
+            image-rendering: pixelated;
+        }
+        button {
+            background: #4a9eff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #357abd;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .preview {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        #originalCanvas {
+            border: 2px solid #4a9eff;
+            max-width: 100%;
+        }
+        .success {
+            color: #4eff4a;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff4a4a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Create 6 Sprite Animation Frames</h1>
+    
+    <div class="instructions">
+        <h2>📋 Instructions:</h2>
+        <ol>
+            <li><strong>Upload your sprite image</strong> - The character sprite you want to use</li>
+            <li><strong>The tool will create 6 frames</strong> - Creating slight variations for animation</li>
+            <li><strong>Download all 6 frames</strong> - Click each download button</li>
+            <li><strong>Save them</strong> in <code>assets/images/</code> as:
+                <ul>
+                    <li>character_frame_1.png</li>
+                    <li>character_frame_2.png</li>
+                    <li>character_frame_3.png</li>
+                    <li>character_frame_4.png</li>
+                    <li>character_frame_5.png</li>
+                    <li>character_frame_6.png</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="upload-section">
+        <h2>Upload Your Sprite Image</h2>
+        <input type="file" id="spriteInput" accept="image/*">
+    </div>
+
+    <div class="preview" id="previewSection" style="display: none;">
+        <h2>Original Sprite</h2>
+        <canvas id="originalCanvas"></canvas>
+    </div>
+
+    <div class="frames-container" id="framesContainer"></div>
+
+    <script>
+        const spriteInput = document.getElementById('spriteInput');
+        const previewSection = document.getElementById('previewSection');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const framesContainer = document.getElementById('framesContainer');
+        let spriteImage = null;
+
+        spriteInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    spriteImage = img;
+                    displayOriginal(img);
+                    generateFrames(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function displayOriginal(img) {
+            previewSection.style.display = 'block';
+            const ctx = originalCanvas.getContext('2d');
+            
+            // Set canvas size to match image
+            originalCanvas.width = img.width;
+            originalCanvas.height = img.height;
+            
+            // Draw original image
+            ctx.drawImage(img, 0, 0);
+        }
+
+        function generateFrames(img) {
+            framesContainer.innerHTML = '';
+            
+            const frameSize = 80; // Size for each frame
+            
+            for (let i = 0; i < 6; i++) {
+                const frameBox = document.createElement('div');
+                frameBox.className = 'frame-box';
+                
+                const title = document.createElement('h3');
+                title.textContent = `Frame ${i + 1}`;
+                frameBox.appendChild(title);
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = frameSize;
+                canvas.height = frameSize;
+                canvas.style.width = '200px';
+                canvas.style.height = '200px';
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, frameSize, frameSize);
+                
+                // Calculate slight variations for animation
+                const offset = i * 2; // Slight offset for each frame
+                const scale = 1 + (Math.sin(i * Math.PI / 3) * 0.05); // Slight scale variation
+                
+                // Center the sprite
+                const x = (frameSize - img.width * scale) / 2;
+                const y = (frameSize - img.height * scale) / 2 + offset;
+                
+                // Draw the sprite with variations
+                ctx.save();
+                ctx.translate(frameSize / 2, frameSize / 2);
+                ctx.scale(scale, scale);
+                ctx.translate(-frameSize / 2, -frameSize / 2);
+                ctx.drawImage(img, x / scale, y / scale);
+                ctx.restore();
+                
+                frameBox.appendChild(canvas);
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = `Download Frame ${i + 1}`;
+                downloadBtn.onclick = function() {
+                    downloadFrame(canvas, i + 1);
+                };
+                frameBox.appendChild(downloadBtn);
+                
+                framesContainer.appendChild(frameBox);
+            }
+        }
+
+        function downloadFrame(canvas, frameNumber) {
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `character_frame_${frameNumber}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>

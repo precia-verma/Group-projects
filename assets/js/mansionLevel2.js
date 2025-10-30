@@ -17,20 +17,19 @@
   let showTransition = false;
   let transitionStartTime = 0;
 
-  // Player sprite images
+  // Player sprites
   const playerSprites = [];
-  let spritesLoaded = 0;
-  const totalSprites = 6;
+  let playerSpritesLoaded = 0;
   let currentSpriteIndex = 0;
-  let animationCounter = 0;
-  const animationSpeed = 8; // Lower = faster animation
+  let spriteAnimationCounter = 0;
+  const spriteAnimationSpeed = 8; // Change sprite every 8 frames when moving
 
   // Player character
   const player = {
     x: 50,
     y: 550,
-    width: 60,  // Increased size for sprite
-    height: 80, // Increased size for sprite
+    width: 80,
+    height: 80,
     speed: 3,
     color: '#ff6b6b',
     isMoving: false
@@ -82,8 +81,10 @@
 
     console.log('Initializing mansion game...', { canvas });
 
-    // Load player sprites
-    loadPlayerSprites();
+    // Load player sprites first
+    loadPlayerSprites(() => {
+      console.log('Player sprites loaded successfully');
+    });
 
     // Load background image
     loadBackground(0, onReady);
@@ -101,24 +102,62 @@
     }, 100);
   }
 
-  function loadPlayerSprites() {
-    console.log('Loading player sprites...');
-    for (let i = 1; i <= totalSprites; i++) {
+  function loadPlayerSprites(onComplete) {
+    const spritePaths = [
+      'assets/images/character_frame_1.png',
+      'assets/images/character_frame_2.png',
+      'assets/images/character_frame_3.png',
+      'assets/images/character_frame_4.png',
+      'assets/images/character_frame_5.png',
+      'assets/images/character_frame_6.png'
+    ];
+
+    console.log('🎮 Loading player sprites...');
+    console.log('Expected paths:', spritePaths);
+    
+    spritePaths.forEach((path, index) => {
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = function() {
-        spritesLoaded++;
-        console.log(`Loaded sprite ${i}/${totalSprites}`);
-        if (spritesLoaded === totalSprites) {
-          console.log('All player sprites loaded!');
+        console.log(`✓ Loaded sprite ${index + 1}/${spritePaths.length}:`, path, `(${img.width}x${img.height})`);
+        playerSprites[index] = img;
+        playerSpritesLoaded++;
+        
+        if (playerSpritesLoaded === spritePaths.length) {
+          console.log('🎉 All player sprites loaded successfully!');
+          console.log('Total sprites:', playerSprites.length);
+          if (onComplete) onComplete();
         }
       };
       img.onerror = function() {
-        console.error(`Failed to load sprite_${i}.png`);
-        spritesLoaded++; // Count it anyway to not block
+        console.error(`❌ Failed to load sprite ${index + 1}:`, path);
+        console.error('   Check if file exists at:', window.location.origin + '/' + path);
+        
+        // Create a fallback colored rectangle as sprite with the frame number
+        const fallbackCanvas = document.createElement('canvas');
+        fallbackCanvas.width = 80;
+        fallbackCanvas.height = 80;
+        const fallbackCtx = fallbackCanvas.getContext('2d');
+        
+        // Draw a colored rectangle with frame number
+        fallbackCtx.fillStyle = `hsl(${index * 60}, 70%, 50%)`;
+        fallbackCtx.fillRect(0, 0, 80, 80);
+        fallbackCtx.fillStyle = '#fff';
+        fallbackCtx.font = 'bold 24px Arial';
+        fallbackCtx.textAlign = 'center';
+        fallbackCtx.textBaseline = 'middle';
+        fallbackCtx.fillText(`F${index + 1}`, 40, 40);
+        
+        playerSprites[index] = fallbackCanvas;
+        playerSpritesLoaded++;
+        
+        if (playerSpritesLoaded === spritePaths.length) {
+          console.log('⚠️  All player sprites loaded (some with fallbacks)');
+          if (onComplete) onComplete();
+        }
       };
-      img.src = `assets/images/sprite_${i}.png`;
-      playerSprites.push(img);
-    }
+      img.src = path;
+    });
   }
 
   function loadBackground(index, onReady) {
@@ -254,12 +293,8 @@
     // Don't update player if prompt is showing
     if (showPrompt) return;
     
-    // Check if player is moving and determine direction
+    // Track if player is moving
     player.isMoving = keys.w || keys.s || keys.a || keys.d;
-    
-    // Determine direction for sprite selection
-    let isMovingLeft = keys.a || keys.w;  // Left or Up uses sprites 1-3
-    let isMovingRight = keys.d || keys.s;  // Right or Down uses sprites 4-6
     
     // Move player based on key presses
     if (keys.w) player.y -= player.speed;
@@ -267,36 +302,22 @@
     if (keys.a) player.x -= player.speed;
     if (keys.d) player.x += player.speed;
 
-    // Update animation frame if moving
-    if (player.isMoving) {
-      animationCounter++;
-      if (animationCounter >= animationSpeed) {
-        animationCounter = 0;
-        
-        // Determine which sprite range to use based on direction
-        if (isMovingRight && !isMovingLeft) {
-          // Moving right/down: cycle through sprites 3-5 (indices 3,4,5)
-          let frameInCycle = (currentSpriteIndex >= 3 && currentSpriteIndex <= 5) 
-            ? (currentSpriteIndex - 3 + 1) % 3 
-            : 0;
-          currentSpriteIndex = 3 + frameInCycle;
-        } else {
-          // Moving left/up: cycle through sprites 0-2 (indices 0,1,2)
-          let frameInCycle = (currentSpriteIndex >= 0 && currentSpriteIndex <= 2) 
-            ? (currentSpriteIndex + 1) % 3 
-            : 0;
-          currentSpriteIndex = frameInCycle;
-        }
-      }
-    } else {
-      // Reset to first frame when idle
-      currentSpriteIndex = 0;
-      animationCounter = 0;
-    }
-
     // Keep player within canvas bounds
     player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
     player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+
+    // Animate sprite if moving
+    if (player.isMoving) {
+      spriteAnimationCounter++;
+      if (spriteAnimationCounter >= spriteAnimationSpeed) {
+        spriteAnimationCounter = 0;
+        currentSpriteIndex = (currentSpriteIndex + 1) % playerSprites.length;
+      }
+    } else {
+      // Reset to first frame when not moving
+      spriteAnimationCounter = 0;
+      currentSpriteIndex = 0;
+    }
 
     // Check if player entered cemetery
     checkCemeteryCollision();
@@ -341,11 +362,14 @@
   }
 
   function drawPlayer() {
-    // Draw player sprite if loaded, otherwise draw circle as fallback
-    if (spritesLoaded === totalSprites && playerSprites[currentSpriteIndex]) {
+    // Draw player sprite if loaded, otherwise use fallback circle
+    if (playerSprites.length > 0 && playerSprites[currentSpriteIndex]) {
       const sprite = playerSprites[currentSpriteIndex];
       
-      // Draw the sprite centered at player position
+      // Disable image smoothing for crisp pixel art rendering
+      ctx.imageSmoothingEnabled = false;
+      
+      // Draw the sprite centered on player position
       ctx.drawImage(
         sprite,
         player.x,
@@ -353,6 +377,15 @@
         player.width,
         player.height
       );
+      
+      // Debug: Show current sprite number at the top
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 3;
+      ctx.font = 'bold 14px Arial';
+      const debugText = `Frame ${currentSpriteIndex + 1}/6`;
+      ctx.strokeText(debugText, player.x, player.y - 10);
+      ctx.fillText(debugText, player.x, player.y - 10);
     } else {
       // Fallback: Draw player as a circle with outline
       ctx.fillStyle = player.color;
@@ -381,6 +414,11 @@
         Math.PI * 2
       );
       ctx.fill();
+      
+      // Show loading message
+      ctx.fillStyle = '#fff';
+      ctx.font = '12px Arial';
+      ctx.fillText('Loading sprites...', player.x - 20, player.y - 10);
     }
   }
 
