@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Character Sprites</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a9eff;
+            text-align: center;
+        }
+        .sprite-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+        .sprite-box {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #4a9eff;
+        }
+        .sprite-box h3 {
+            color: #4a9eff;
+            margin-bottom: 15px;
+        }
+        .sprite-box img {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #666;
+            background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+            image-rendering: pixelated;
+        }
+        .sprite-box .status {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .sprite-box .loaded {
+            background: #2a4a2a;
+            color: #4eff4a;
+        }
+        .sprite-box .error {
+            background: #4a2a2a;
+            color: #ff4a4a;
+        }
+        .animation-test {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px auto;
+            max-width: 600px;
+            border: 2px solid #4a9eff;
+        }
+        .animation-test canvas {
+            border: 2px solid #666;
+            background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4a9eff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Character Sprite Test</h1>
+    
+    <div class="sprite-grid" id="spriteGrid"></div>
+
+    <div class="animation-test">
+        <h2>Animation Test</h2>
+        <p>The character should cycle through all 6 frames</p>
+        <canvas id="animCanvas" width="200" height="200"></canvas>
+        <div>
+            <button onclick="startAnimation()">Start Animation</button>
+            <button onclick="stopAnimation()">Stop Animation</button>
+        </div>
+        <p id="animStatus"></p>
+    </div>
+
+    <script>
+        const spritePaths = [
+            'assets/images/character_frame_1.png',
+            'assets/images/character_frame_2.png',
+            'assets/images/character_frame_3.png',
+            'assets/images/character_frame_4.png',
+            'assets/images/character_frame_5.png',
+            'assets/images/character_frame_6.png'
+        ];
+
+        const sprites = [];
+        let loadedCount = 0;
+        const spriteGrid = document.getElementById('spriteGrid');
+
+        // Load and display each sprite
+        spritePaths.forEach((path, index) => {
+            const spriteBox = document.createElement('div');
+            spriteBox.className = 'sprite-box';
+            spriteBox.id = `sprite-box-${index}`;
+            
+            const title = document.createElement('h3');
+            title.textContent = `Frame ${index + 1}`;
+            
+            const img = document.createElement('img');
+            img.id = `sprite-${index}`;
+            img.alt = `Frame ${index + 1}`;
+            
+            const status = document.createElement('div');
+            status.className = 'status';
+            status.textContent = 'Loading...';
+            
+            spriteBox.appendChild(title);
+            spriteBox.appendChild(img);
+            spriteBox.appendChild(status);
+            spriteGrid.appendChild(spriteBox);
+
+            // Load sprite
+            const sprite = new Image();
+            sprite.onload = function() {
+                img.src = this.src;
+                status.textContent = `✓ Loaded (${this.width}×${this.height})`;
+                status.className = 'status loaded';
+                sprites[index] = this;
+                loadedCount++;
+                
+                if (loadedCount === spritePaths.length) {
+                    document.getElementById('animStatus').textContent = '✓ All sprites loaded! Click "Start Animation" to test.';
+                }
+            };
+            
+            sprite.onerror = function() {
+                status.textContent = `✗ Failed to load`;
+                status.className = 'status error';
+                img.alt = 'Failed to load';
+                console.error('Failed to load:', path);
+            };
+            
+            sprite.src = path;
+        });
+
+        // Animation test
+        const animCanvas = document.getElementById('animCanvas');
+        const ctx = animCanvas.getContext('2d');
+        let animationFrame = null;
+        let currentFrame = 0;
+        let frameCounter = 0;
+
+        function startAnimation() {
+            if (animationFrame) return; // Already running
+            
+            if (sprites.length === 0) {
+                document.getElementById('animStatus').textContent = '✗ No sprites loaded yet!';
+                return;
+            }
+            
+            document.getElementById('animStatus').textContent = '▶️ Animation running...';
+            
+            function animate() {
+                ctx.clearRect(0, 0, animCanvas.width, animCanvas.height);
+                
+                if (sprites[currentFrame]) {
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(sprites[currentFrame], 0, 0, 200, 200);
+                    
+                    // Show frame number
+                    ctx.fillStyle = '#fff';
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 3;
+                    ctx.font = 'bold 20px Arial';
+                    ctx.strokeText(`Frame ${currentFrame + 1}`, 10, 30);
+                    ctx.fillText(`Frame ${currentFrame + 1}`, 10, 30);
+                }
+                
+                frameCounter++;
+                if (frameCounter >= 10) { // Change frame every 10 frames
+                    frameCounter = 0;
+                    currentFrame = (currentFrame + 1) % sprites.length;
+                }
+                
+                animationFrame = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function stopAnimation() {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+                document.getElementById('animStatus').textContent = '⏸️ Animation stopped.';
+            }
+        }
+
+        // Auto-start animation when all sprites are loaded
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (loadedCount === spritePaths.length) {
+                    startAnimation();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
