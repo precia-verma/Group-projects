@@ -22,7 +22,7 @@
   let playerSpritesLoaded = 0;
   let currentSpriteIndex = 0;
   let spriteAnimationCounter = 0;
-  const spriteAnimationSpeed = 8; // Change sprite every 8 frames when moving
+  const spriteAnimationSpeed = 12; // Change sprite every 8 frames when moving
 
   // Player character
   const player = {
