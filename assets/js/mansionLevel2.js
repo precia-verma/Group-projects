@@ -492,28 +492,31 @@
   }
 
   function drawPlayer() {
-    // Draw player sprite if loaded, otherwise use fallback circle
-    if (playerSprites.length === 6 && playerSprites[currentSpriteIndex]) {
+    let spriteDrawn = false;
+    
+    // Try to draw player sprite if loaded
+    if (playerSprites.length >= 6 && playerSprites[currentSpriteIndex]) {
       const sprite = playerSprites[currentSpriteIndex];
       
-      // Disable image smoothing for crisp pixel art rendering
-      ctx.imageSmoothingEnabled = false;
-      
-      // Ensure we have a valid sprite index
-      const safeIndex = Math.max(0, Math.min(currentSpriteIndex, playerSprites.length - 1));
-      const safeSprite = playerSprites[safeIndex];
-      
-      // Draw the sprite centered on player position
-      if (safeSprite && safeSprite.complete && safeSprite.naturalWidth > 0) {
+      // Check if sprite is fully loaded
+      if (sprite && sprite.complete && sprite.naturalWidth > 0) {
+        // Disable image smoothing for crisp pixel art rendering
+        ctx.imageSmoothingEnabled = false;
+        
+        // Draw the sprite
         ctx.drawImage(
-          safeSprite,
+          sprite,
           player.x,
           player.y,
           player.width,
           player.height
         );
+        spriteDrawn = true;
       }
-    } else {
+    }
+    
+    // If sprite wasn't drawn, show fallback
+    if (!spriteDrawn) {
       // Fallback: Draw player as a circle with outline
       ctx.fillStyle = player.color;
       ctx.strokeStyle = '#fff';
