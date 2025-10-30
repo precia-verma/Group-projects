@@ -163,35 +163,6 @@
       console.log(`Loading sprite ${index + 1}: ${path}`);
     });
   }
-    
-    spriteSheet.onerror = function() {
-      console.error(`❌ Failed to load sprite sheet:`, spriteSheetPath);
-      
-      // Create fallback sprites
-      for (let i = 0; i < 6; i++) {
-        const fallbackCanvas = document.createElement('canvas');
-        fallbackCanvas.width = 80;
-        fallbackCanvas.height = 80;
-        const fallbackCtx = fallbackCanvas.getContext('2d');
-        
-        fallbackCtx.fillStyle = `hsl(${i * 60}, 70%, 50%)`;
-        fallbackCtx.fillRect(0, 0, 80, 80);
-        fallbackCtx.fillStyle = '#fff';
-        fallbackCtx.font = 'bold 24px Arial';
-        fallbackCtx.textAlign = 'center';
-        fallbackCtx.textBaseline = 'middle';
-        fallbackCtx.fillText(`F${i + 1}`, 40, 40);
-        
-        playerSprites[i] = fallbackCanvas;
-      }
-      
-      playerSpritesLoaded = 6;
-      console.log('⚠️  Using fallback sprites');
-      if (onComplete) onComplete();
-    };
-    
-    spriteSheet.src = spriteSheetPath;
-  }
 
   function loadBackground(index, onReady) {
     if (index >= bgPaths.length) {
