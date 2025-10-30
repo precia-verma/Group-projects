@@ -183,8 +183,110 @@
     img.src = bgPaths[index];
   }
 
+  function setupMobileControls() {
+    const mobileButtons = document.querySelectorAll('.dpad-button');
+    
+    mobileButtons.forEach(button => {
+      const key = button.getAttribute('data-key');
+      
+      // Touch start
+      button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys[key] = true;
+        button.classList.add('active');
+        console.log('Mobile touch:', key, 'pressed');
+      });
+      
+      // Touch end
+      button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+        console.log('Mobile touch:', key, 'released');
+      });
+      
+      // Touch cancel (when touch goes outside button)
+      button.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+      
+      // Mouse events for testing on desktop
+      button.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        keys[key] = true;
+        button.classList.add('active');
+      });
+      
+      button.addEventListener('mouseup', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+      
+      button.addEventListener('mouseleave', (e) => {
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+    });
+    
+    console.log('Mobile controls setup complete');
+  }
+
+  function setupMobileControls() {
+    const dpadButtons = document.querySelectorAll('.dpad-button');
+    
+    dpadButtons.forEach(button => {
+      const key = button.dataset.key;
+      
+      // Touch start
+      button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys[key] = true;
+        button.classList.add('active');
+        console.log('Mobile touch:', key);
+      });
+      
+      // Touch end
+      button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+      
+      // Touch cancel
+      button.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+      
+      // Also support mouse for desktop testing
+      button.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        keys[key] = true;
+        button.classList.add('active');
+      });
+      
+      button.addEventListener('mouseup', (e) => {
+        e.preventDefault();
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+      
+      button.addEventListener('mouseleave', (e) => {
+        keys[key] = false;
+        button.classList.remove('active');
+      });
+    });
+  }
+
   function setupControls() {
     console.log('Setting up controls...');
+    
+    // Setup mobile touch controls
+    setupMobileControls();
     
     // Keyboard event listeners
     document.addEventListener('keydown', (e) => {
@@ -224,6 +326,9 @@
         e.preventDefault();
       }
     });
+
+    // Mobile touch controls
+    setupMobileControls();
 
     // Mouse click listener for buttons
     canvas.addEventListener('click', (e) => {
