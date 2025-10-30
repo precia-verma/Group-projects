@@ -7,18 +7,50 @@ background: images/platformer/backgrounds/spookyforestforgame.png
 permalink: /spookyforest
 ---
 
+<h1 style="color: white; text-align: center;">Spooky Forest</h1>
 
-<canvas id="world"></canvas> <!-- Canvas element for rendering the game world -->
+<!--START BUTTON-->
+<button id="startButton"
+  style="
+    font-size: 24px;
+    padding: 10px 20px;
+    margin: 20px auto;
+    display: block;
+    cursor: pointer;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: opacity 0.8s ease;
+  ">
+  Start Game
+</button>
+
+<!-- GAME CANVAS -->
+<canvas id="world" width="800" height="400"
+  style="border: 2px solid white; display: none; margin: 0 auto; display: block;">
+</canvas>
 
 <script>
-  
-  window.onload = function() {}
-
- 
-  const canvas = document.getElementById("world");
+  // BUTTON & START SEQUENCE 
+  const startButton = document.getElementById('startButton');
+  const canvas = document.getElementById('world');
   const ctx = canvas.getContext('2d');
 
-  // Images
+  startButton.addEventListener('click', () => {
+    // Fade out button
+    startButton.style.opacity = '0';
+    startButton.style.pointerEvents = 'none';
+
+    // After fade, hide button and show game
+    setTimeout(() => {
+      startButton.style.display = 'none';
+      canvas.style.display = 'block';
+      startGameWorld(); // 🔥 Launch actual game
+    }, 800);
+  });
+
+  //  GAME SETUP 
   const backgroundImg = new Image();
   const spriteImg = new Image();
   backgroundImg.src = 'images/platformer/backgrounds/spookyforestforgame.png';
@@ -33,9 +65,10 @@ permalink: /spookyforest
 
   // Wait for background + first sprite (enough to size/draw); others can stream in
   let imagesLoaded = 0;
-  backgroundImg.onload = () => { imagesLoaded++; startGameWorld(); };
-  spriteImg.onload     = () => { imagesLoaded++; startGameWorld(); };
+  backgroundImg.onload = () => { imagesLoaded++; if (imagesLoaded === 2) startGameWorld(); };
+  spriteImg.onload = () => { imagesLoaded++; if (imagesLoaded === 2) startGameWorld(); };
 
+  //  GAME WORLD FUNCTION 
   function startGameWorld() {
     if (imagesLoaded < 2) return; // only start once both are ready
 
@@ -221,8 +254,7 @@ permalink: /spookyforest
           const expectedId = this.sequence[this.inputIndex];
           if (hit.id === expectedId) {
             this.inputIndex++;
-            
-            if (this.inputIndex === this.sequence.length) {
+            if (this.inputIndex === this.round) {
               this.acceptingInput = false;
             
               playNote(SUCCESS_NOTE, 160);
