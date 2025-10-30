@@ -103,54 +103,66 @@
   }
 
   function loadPlayerSprites(onComplete) {
-    // Load the sprite sheet (which contains all 6 frames in a grid)
-    const spriteSheetPath = 'assets/images/character_frame_1.png'; // Using first frame as sprite sheet
+    const spritePaths = [
+      'assets/images/character_frame_1.png',
+      'assets/images/character_frame_2.png',
+      'assets/images/character_frame_3.png',
+      'assets/images/character_frame_4.png',
+      'assets/images/character_frame_5.png',
+      'assets/images/character_frame_6.png'
+    ];
+
+    console.log('🎮 Loading 6 individual player sprites...');
+    console.log('Sprite paths:', spritePaths);
     
-    console.log('🎮 Loading player sprite sheet...');
-    console.log('Sprite sheet path:', spriteSheetPath);
-    
-    const spriteSheet = new Image();
-    spriteSheet.crossOrigin = 'anonymous';
-    
-    spriteSheet.onload = function() {
-      console.log(`✓ Loaded sprite sheet: ${spriteSheetPath} (${spriteSheet.width}x${spriteSheet.height})`);
+    spritePaths.forEach((path, index) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
       
-      // The sprite sheet has 6 characters in a 3x2 grid
-      const cols = 3;
-      const rows = 2;
-      const frameWidth = spriteSheet.width / cols;
-      const frameHeight = spriteSheet.height / rows;
-      
-      console.log(`Frame size: ${frameWidth}x${frameHeight}`);
-      
-      // Extract each frame from the sprite sheet
-      for (let i = 0; i < 6; i++) {
-        const canvas = document.createElement('canvas');
-        canvas.width = frameWidth;
-        canvas.height = frameHeight;
-        const ctx = canvas.getContext('2d');
+      img.onload = function() {
+        console.log(`✓ Loaded sprite ${index + 1}/6: ${path} (${img.width}x${img.height})`);
+        playerSprites[index] = img;
+        playerSpritesLoaded++;
         
-        // Calculate position in grid (reading left to right, top to bottom)
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        const sx = col * frameWidth;
-        const sy = row * frameHeight;
-        
-        // Extract this frame from the sprite sheet
-        ctx.drawImage(
-          spriteSheet,
-          sx, sy, frameWidth, frameHeight,  // Source rectangle
-          0, 0, frameWidth, frameHeight     // Destination rectangle
-        );
-        
-        playerSprites[i] = canvas;
-        console.log(`✓ Extracted frame ${i + 1} from position (${col}, ${row})`);
-      }
+        if (playerSpritesLoaded === spritePaths.length) {
+          console.log('🎉 All player sprites loaded successfully!');
+          console.log('Total sprites loaded:', playerSprites.length);
+          if (onComplete) onComplete();
+        }
+      };
       
-      playerSpritesLoaded = 6;
-      console.log('🎉 All 6 frames extracted from sprite sheet!');
-      if (onComplete) onComplete();
-    };
+      img.onerror = function() {
+        console.error(`❌ Failed to load sprite ${index + 1}: ${path}`);
+        console.error('   Full URL would be:', window.location.origin + '/' + path);
+        
+        // Create a fallback colored rectangle as sprite
+        const fallbackCanvas = document.createElement('canvas');
+        fallbackCanvas.width = 682;
+        fallbackCanvas.height = 682;
+        const fallbackCtx = fallbackCanvas.getContext('2d');
+        
+        // Draw a colored rectangle with frame number
+        fallbackCtx.fillStyle = `hsl(${index * 60}, 70%, 50%)`;
+        fallbackCtx.fillRect(0, 0, 682, 682);
+        fallbackCtx.fillStyle = '#fff';
+        fallbackCtx.font = 'bold 100px Arial';
+        fallbackCtx.textAlign = 'center';
+        fallbackCtx.textBaseline = 'middle';
+        fallbackCtx.fillText(`Frame ${index + 1}`, 341, 341);
+        
+        playerSprites[index] = fallbackCanvas;
+        playerSpritesLoaded++;
+        
+        if (playerSpritesLoaded === spritePaths.length) {
+          console.log('⚠️  All sprites loaded (some with fallbacks)');
+          if (onComplete) onComplete();
+        }
+      };
+      
+      img.src = path;
+      console.log(`Loading sprite ${index + 1}: ${path}`);
+    });
+  }
     
     spriteSheet.onerror = function() {
       console.error(`❌ Failed to load sprite sheet:`, spriteSheetPath);
