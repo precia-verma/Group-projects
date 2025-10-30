@@ -17,14 +17,23 @@
   let showTransition = false;
   let transitionStartTime = 0;
 
+  // Player sprite images
+  const playerSprites = [];
+  let spritesLoaded = 0;
+  const totalSprites = 6;
+  let currentSpriteIndex = 0;
+  let animationCounter = 0;
+  const animationSpeed = 8; // Lower = faster animation
+
   // Player character
   const player = {
     x: 50,
     y: 550,
-    width: 30,
-    height: 30,
+    width: 60,  // Increased size for sprite
+    height: 80, // Increased size for sprite
     speed: 3,
-    color: '#ff6b6b'
+    color: '#ff6b6b',
+    isMoving: false
   };
 
   // Cemetery area (adjust these coordinates based on your image)
@@ -73,6 +82,9 @@
 
     console.log('Initializing mansion game...', { canvas });
 
+    // Load player sprites
+    loadPlayerSprites();
+
     // Load background image
     loadBackground(0, onReady);
 
@@ -87,6 +99,26 @@
       canvas.focus();
       console.log('Canvas focused');
     }, 100);
+  }
+
+  function loadPlayerSprites() {
+    console.log('Loading player sprites...');
+    for (let i = 1; i <= totalSprites; i++) {
+      const img = new Image();
+      img.onload = function() {
+        spritesLoaded++;
+        console.log(`Loaded sprite ${i}/${totalSprites}`);
+        if (spritesLoaded === totalSprites) {
+          console.log('All player sprites loaded!');
+        }
+      };
+      img.onerror = function() {
+        console.error(`Failed to load sprite_${i}.png`);
+        spritesLoaded++; // Count it anyway to not block
+      };
+      img.src = `assets/images/sprite_${i}.png`;
+      playerSprites.push(img);
+    }
   }
 
   function loadBackground(index, onReady) {
@@ -222,11 +254,27 @@
     // Don't update player if prompt is showing
     if (showPrompt) return;
     
+    // Check if player is moving
+    player.isMoving = keys.w || keys.s || keys.a || keys.d;
+    
     // Move player based on key presses
     if (keys.w) player.y -= player.speed;
     if (keys.s) player.y += player.speed;
     if (keys.a) player.x -= player.speed;
     if (keys.d) player.x += player.speed;
+
+    // Update animation frame if moving
+    if (player.isMoving) {
+      animationCounter++;
+      if (animationCounter >= animationSpeed) {
+        animationCounter = 0;
+        currentSpriteIndex = (currentSpriteIndex + 1) % totalSprites;
+      }
+    } else {
+      // Reset to first frame when idle
+      currentSpriteIndex = 0;
+      animationCounter = 0;
+    }
 
     // Keep player within canvas bounds
     player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
@@ -275,33 +323,47 @@
   }
 
   function drawPlayer() {
-    // Draw player as a circle with outline
-    ctx.fillStyle = player.color;
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    
-    ctx.beginPath();
-    ctx.arc(
-      player.x + player.width / 2,
-      player.y + player.height / 2,
-      player.width / 2,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
-    ctx.stroke();
+    // Draw player sprite if loaded, otherwise draw circle as fallback
+    if (spritesLoaded === totalSprites && playerSprites[currentSpriteIndex]) {
+      const sprite = playerSprites[currentSpriteIndex];
+      
+      // Draw the sprite centered at player position
+      ctx.drawImage(
+        sprite,
+        player.x,
+        player.y,
+        player.width,
+        player.height
+      );
+    } else {
+      // Fallback: Draw player as a circle with outline
+      ctx.fillStyle = player.color;
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      
+      ctx.beginPath();
+      ctx.arc(
+        player.x + player.width / 2,
+        player.y + player.height / 2,
+        player.width / 2,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+      ctx.stroke();
 
-    // Draw a direction indicator (small dot)
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(
-      player.x + player.width / 2,
-      player.y + player.height / 2 - 5,
-      3,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
+      // Draw a direction indicator (small dot)
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(
+        player.x + player.width / 2,
+        player.y + player.height / 2 - 5,
+        3,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+    }
   }
 
   function drawControls() {
