@@ -7,378 +7,151 @@ background: images/platformer/backgrounds/spookyforestforgame.png
 permalink: /spookyforest
 ---
 
-<h1 style="color: white; text-align: center;">Spooky Forest</h1>
+<<!-- Spooky Forest Game (embed version for GitHub Pages layout) -->
 
-<!-- Start Button -->
-<button id="startButton"
-  style="
-    font-size: 24px;
-    padding: 10px 20px;
-    margin: 20px auto;
-    display: block;
-    cursor: pointer;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    transition: opacity 0.8s ease;
-  ">
+<h1 id="gameTitle" style="
+  color: white;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 20px;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  z-index: 10;
+  pointer-events: none;">
+  Spooky Forest
+</h1>
+
+<!-- Buttons -->
+<button id="startButton" style="
+  font-size: 28px;
+  padding: 12px 28px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  transition: opacity 0.8s ease;">
   Start Game
 </button>
 
-<!-- HOW TO PLAY SECTION -->
-<div id="instructions"
-  style="
-    color: white;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 18px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    padding: 15px 20px;
-    transition: opacity 0.8s ease;
-    backdrop-filter: blur(4px);
-  ">
-  <h2>How to Play</h2>
-  <p> Use your keyboard or mouse to explore the spooky forest.</p>
-  <p> Click on gravestones to earn points and reveal hidden secrets.</p>
-  <p> Be aware of the gravestones as they glow in a special sequence.</p>
-  <p> Stay tuned to listen to the hidden melody revealed at the end.</p>
-   <p> Press <b>Start Game</b> when you’re ready to begin your adventure.</p>
-</div>
+<button id="playAgainButton" style="
+  font-size: 22px;
+  padding: 10px 22px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  display: none;
+  z-index: 11;">
+  Play Again
+</button>
 
-<!--Game Canvas -->
-<canvas id="world" width="800" height="400"
-  style="border:2px solid white;margin:0 auto;display:none;"></canvas>
+<!-- Fullscreen Canvas -->
+<canvas id="world" style="
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0b0f14;
+  margin: 0;
+  border: none;
+  z-index: 1;"></canvas>
 
 <script>
-  const startButton = document.getElementById('startButton');
-  const playAgainButton = document.getElementById('playAgainButton');
-  const canvas = document.getElementById('world');
-  const ctx = canvas.getContext('2d');
+const startButton = document.getElementById('startButton');
+const playAgainButton = document.getElementById('playAgainButton');
+const canvas = document.getElementById('world');
+const ctx = canvas.getContext('2d');
 
-  // Fade out start, then boot game
-  startButton.addEventListener('click', () => {
-    startButton.style.opacity = '0';
-    startButton.style.pointerEvents = 'none';
-    setTimeout(() => {
-      startButton.style.display = 'none';
-      canvas.style.display = 'block';
-      startGame();
-    }, 800);
-  });
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-  function startGame() {
-    const backgroundImg = new Image();
-    const spriteImg = new Image();
-    backgroundImg.src = "images/platformer/backgrounds/spookyforestforgame.png";
-    spriteImg.src = "images/platformer/sprites/gravestone_1.png";
+startButton.addEventListener('click', () => {
+  startButton.style.opacity = '0';
+  startButton.style.pointerEvents = 'none';
+  setTimeout(() => {
+    startButton.style.display = 'none';
+    startGame();
+  }, 800);
+});
 
-    const sprite2Img = new Image(); sprite2Img.src = "images/platformer/sprites/gravestone_2.png";
-    const sprite3Img = new Image(); sprite3Img.src = "images/platformer/sprites/gravestone_3.png";
-    const sprite4Img = new Image(); sprite4Img.src = "images/platformer/sprites/gravestone_4.png";
-    const sprite5Img = new Image(); sprite5Img.src = "images/platformer/sprites/gravestone_5.png";
-    const sprite6Img = new Image(); sprite6Img.src = "images/platformer/sprites/gravestone_6.png";
+function startGame() {
+  resizeCanvas();
+  const bg = new Image(), s1=new Image(), s2=new Image(), s3=new Image(), s4=new Image(), s5=new Image(), s6=new Image();
+  bg.src="images/platformer/backgrounds/spookyforestforgame.png";
+  s1.src="images/platformer/sprites/gravestone_1.png";
+  s2.src="images/platformer/sprites/gravestone_2.png";
+  s3.src="images/platformer/sprites/gravestone_3.png";
+  s4.src="images/platformer/sprites/gravestone_4.png";
+  s5.src="images/platformer/sprites/gravestone_5.png";
+  s6.src="images/platformer/sprites/gravestone_6.png";
 
-    let imagesLoaded = 0;
-    const totalImages = 7;
-    const checkLoaded = () => {
-      imagesLoaded++;
-      if (imagesLoaded === totalImages) startGameWorld();
-    };
+  let loaded=0; const total=7;
+  const onLoad=()=>{if(++loaded===total) startGameWorld();};
+  [bg,s1,s2,s3,s4,s5,s6].forEach(i=>i.onload=onLoad);
 
-    backgroundImg.onload = checkLoaded;
-    [spriteImg, sprite2Img, sprite3Img, sprite4Img, sprite5Img, sprite6Img]
-      .forEach(img => img.onload = checkLoaded);
+  function startGameWorld(){
+    let audioCtx=null, masterGain=null;
+    const NOTE_FREQ={"e4":329.63,"g4":392,"d#4":311.13,"f#4":369.99,"c4":261.63,"f4":349.23,"c#4":277.18,"a3":220};
+    const GRAVE_TO_NOTE={1:"e4",2:"g4",3:"d#4",4:"f#4",5:"c4",6:"f4"};
+    const SUCCESS_NOTE="c#4", FAIL_NOTE="a3";
+    function initAudio(){if(audioCtx)return;audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.gain.value=.6;masterGain.connect(audioCtx.destination);}
+    function playNote(note,ms=500,type="sine"){if(!audioCtx||!NOTE_FREQ[note])return;const now=audioCtx.currentTime;const osc=audioCtx.createOscillator();const g=audioCtx.createGain();osc.type=type;osc.frequency.value=NOTE_FREQ[note];g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(1,now+.01);g.gain.exponentialRampToValueAtTime(.0001,now+ms/1000-.02);osc.connect(g);g.connect(masterGain);osc.start(now);osc.stop(now+ms/1000);}
 
-    function startGameWorld() {
-      let audioCtx = null, masterGain = null;
-
-      const NOTE_FREQ = {
-        "e4": 329.63, "g4": 392.00, "d#4": 311.13,
-        "f#4": 369.99, "c4": 261.63, "f4": 349.23,
-        "c#4": 277.18, "a3": 220.00
-      };
-
-      const GRAVE_TO_NOTE = { 1:"e4", 2:"g4", 3:"d#4", 4:"f#4", 5:"c4", 6:"f4" };
-      const SUCCESS_NOTE = "c#4";
-      const FAIL_NOTE = "a3";
-
-      function initAudio() {
-        if (audioCtx) return;
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.6;
-        masterGain.connect(audioCtx.destination);
-      }
-
-      function playNote(note, ms = 500, type = "sine") {
-        if (!audioCtx || !NOTE_FREQ[note]) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        osc.type = type;
-        osc.frequency.value = NOTE_FREQ[note];
-        const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(1.0, now + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000 - 0.02);
-        osc.connect(gain); gain.connect(masterGain);
-        osc.start(now); osc.stop(now + ms/1000);
-      }
-
-      class GameObject {
-        constructor(image, width, height, x=0, y=0, speedRatio=0) {
-          this.image = image; this.width = width; this.height = height;
-          this.x = x; this.y = y; this.speedRatio = speedRatio;
-          this.speed = GameWorld.gameSpeed * this.speedRatio;
-        }
-        update() {}
-        draw(ctx) { ctx.drawImage(this.image, this.x, this.y, this.width, this.height); }
-      }
-
-      class Background extends GameObject {
-        constructor(image, gameWorld) {
-          super(image, gameWorld.width, gameWorld.height, 0, 0, 0);
-        }
-        update() { this.x = (this.x - this.speed) % this.width; }
-        draw(ctx) {
-          ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-          ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
-        }
-      }
-
-      class Player extends GameObject {
-        constructor(image, gameWorld, customX, customY, id, note) {
-          const width  = (image.naturalWidth  || 320) / 2;
-          const height = (image.naturalHeight || 320) / 2;
-          const x = customX ?? (gameWorld.width - width) / 2;
-          const y = customY ?? (gameWorld.height - height) / 2;
-          super(image, width, height, x, y);
-          this.id = id; this.note = note;
-          this.glowUntil = 0;
-          this.errorUntil = 0;
-        }
-        glow(ms = 500) { this.glowUntil = performance.now() + ms; }
-        flashError(ms = 600) { this.errorUntil = performance.now() + ms; }
-        containsPoint(px, py) {
-          return (px >= this.x && px <= this.x + this.width &&
-                  py >= this.y && py <= this.y + this.height);
-        }
-        draw(ctx) {
-          const now = performance.now();
-          if (now < this.errorUntil) {
-            ctx.save();
-            ctx.shadowColor = "rgba(255, 0, 0, 0.95)";
-            ctx.shadowBlur = 18;
-            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-            ctx.globalCompositeOperation = "multiply";
-            ctx.globalAlpha = 0.25;
-            ctx.fillStyle = "red";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.restore();
-            return;
-          }
-          if (now < this.glowUntil) {
-            ctx.save();
-            ctx.shadowColor = "rgba(0, 255, 255, 0.9)";
-            ctx.shadowBlur = 10;
-            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-            ctx.globalCompositeOperation = "screen";
-            ctx.globalAlpha = 0.18;
-            ctx.fillStyle = "#aaf";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.restore();
-          } else {
-            super.draw(ctx);
-          }
-        }
-      }
-
-      class GameWorld {
-        static gameSpeed = 5;
-
-        constructor(backgroundImg, spriteImg) {
-          this.canvas = canvas;
-          this.ctx = ctx;
-
-          // Size canvas to viewport (keeps click math correct on HiDPI)
-          const setSize = () => {
-            const dpr = window.devicePixelRatio || 1;
-            const cssW = Math.min(window.innerWidth, 1200);
-            const cssH = Math.min(window.innerHeight - 20, 700);
-            this.canvas.style.width = cssW + "px";
-            this.canvas.style.height = cssH + "px";
-            this.canvas.width = Math.floor(cssW * dpr);
-            this.canvas.height = Math.floor(cssH * dpr);
-            this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // map clicks 1:1 to CSS pixels
-            this.width = cssW; this.height = cssH;
-          };
-          setSize();
-          window.addEventListener('resize', setSize);
-
-          this.players = [
-            new Player(spriteImg,  this,  60, this.height/2 - 60, 1, GRAVE_TO_NOTE[1]),
-            new Player(sprite2Img, this, 220, this.height/2 - 60, 2, GRAVE_TO_NOTE[2]),
-            new Player(sprite3Img, this, 380, this.height/2 - 60, 3, GRAVE_TO_NOTE[3]),
-            new Player(sprite4Img, this, 540, this.height/2 - 60, 4, GRAVE_TO_NOTE[4]),
-            new Player(sprite5Img, this, 700, this.height/2 - 60, 5, GRAVE_TO_NOTE[5]),
-            new Player(sprite6Img, this, 860, this.height/2 - 60, 6, GRAVE_TO_NOTE[6])
-          ];
-
-          this.gameObjects = [new Background(backgroundImg, this), ...this.players];
-
-          this.sequence = [2, 4, 1, 6, 3, 5];
-          this.round = 1;
-          this.acceptingInput = false;
-          this.inputIndex = 0;
-          this.audioUnlocked = false;
-          this.errorActive = false;
-          this.message = "";
-
-          // Click handling
-          this.canvas.addEventListener("click", async (ev) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = ev.clientX - rect.left;
-            const y = ev.clientY - rect.top;
-
-            if (!this.audioUnlocked) {
-              initAudio();
-              this.audioUnlocked = true;
-              this.round = 1;
-              this.message = "";
-              await this.playRound();
-              return;
-            }
-
-            if (this.errorActive || !this.acceptingInput) return;
-
-            const hit = this.players.find(p => p.containsPoint(x, y));
-            if (!hit) return;
-
-            hit.glow(420);
-            playNote(hit.note, 420);
-
-            const expectedId = this.sequence[this.inputIndex];
-
-            if (hit.id === expectedId) {
-              this.inputIndex++;
-              if (this.inputIndex === this.round) {
-                this.acceptingInput = false;
-                if (this.round === this.sequence.length) {
-                  // Win!
-                  playNote(SUCCESS_NOTE, 160);
-                  await this.sleep(150);
-                  playNote(SUCCESS_NOTE, 200);
-                  await this.sleep(190);
-                  playNote(SUCCESS_NOTE, 240);
-                  this.message = "You won! 🎉";
-                  playAgainButton.style.display = "block";
-                  return;
-                }
-                this.round++;
-                await this.sleep(400);
-                await this.playRound();
-              }
-            } else {
-              // Wrong note: error state
-              await this.triggerErrorState();
-            }
-          });
-
-          // Replay current round
-          window.addEventListener("keydown", (e) => {
-            if (e.key.toLowerCase() === "r" && this.audioUnlocked && !this.errorActive) {
-              this.playRound();
-            }
-          });
-
-          // Play Again handler
-          playAgainButton.onclick = async () => {
-            playAgainButton.style.display = "none";
-            this.resetGame();
-            await this.playRound();
-          };
-        }
-
-        setMessage(txt) { this.message = txt; }
-        clearMessage() { this.message = ""; }
-
-        resetGame() {
-          this.round = 1;
-          this.inputIndex = 0;
-          this.acceptingInput = false;
-          this.errorActive = false;
-          this.clearMessage();
-        }
-
-        async triggerErrorState() {
-          this.acceptingInput = false;
-          this.errorActive = true;
-          this.setMessage("Wrong gravestone! Try again.");
-          this.players.forEach(p => p.flashError(650));
-          playNote(FAIL_NOTE, 180);
-          await this.sleep(100);
-          playNote(FAIL_NOTE, 220);
-          await this.sleep(500);
-          playAgainButton.style.display = "block";
-        }
-
-        sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
-
-        async flashAndPlayById(id, ms = 620) {
-          const p = this.players.find(pl => pl.id === id);
-          if (!p) return;
-          p.glow(ms - 60);
-          playNote(p.note, ms - 80);
-          await this.sleep(ms);
-        }
-
-        async playRound() {
-          this.errorActive = false;
-          this.acceptingInput = false;
-          this.inputIndex = 0;
-          this.setMessage(`Listen and repeat (Round ${this.round})`);
-          await this.sleep(300);
-          for (let i = 0; i < this.round; i++) {
-            const id = this.sequence[i];
-            await this.flashAndPlayById(id, 620);
-            await this.sleep(180);
-          }
-          this.setMessage("Your turn!");
-          this.acceptingInput = true;
-        }
-
-        gameLoop() {
-          this.ctx.clearRect(0, 0, this.width, this.height);
-          for (const obj of this.gameObjects) { obj.update(); obj.draw(this.ctx); }
-
-          // HUD
-          this.ctx.save();
-          this.ctx.fillStyle = "rgba(255,255,255,0.95)";
-          this.ctx.font = "16px system-ui, sans-serif";
-          const hud = this.audioUnlocked
-            ? `Round: ${Math.min(this.round, this.sequence.length)} / ${this.sequence.length}  (press "R" to replay)`
-            : "Click the canvas to start sound";
-          this.ctx.fillText(hud, 12, 24);
-
-          if (this.message) {
-            this.ctx.font = "20px system-ui, sans-serif";
-            this.ctx.fillText(this.message, 12, 52);
-          }
-          this.ctx.restore();
-
-          requestAnimationFrame(this.gameLoop.bind(this));
-        }
-
-        start() { this.gameLoop(); }
-      }
-
-      const world = new GameWorld(backgroundImg, spriteImg);
-      world.start();
+    class Player {
+      constructor(image,x,y,id,note){this.image=image;this.id=id;this.note=note;this.x=x;this.y=y;this.w=image.width/2;this.h=image.height/2;this.glowUntil=0;this.errorUntil=0;}
+      glow(ms=500){this.glowUntil=performance.now()+ms;}
+      flashError(ms=600){this.errorUntil=performance.now()+ms;}
+      contains(px,py){return(px>=this.x&&px<=this.x+this.w&&py>=this.y&&py<=this.y+this.h);}
+      draw(ctx){const now=performance.now();if(now<this.errorUntil){ctx.save();ctx.shadowColor="rgba(255,0,0,.95)";ctx.shadowBlur=18;ctx.drawImage(this.image,this.x,this.y,this.w,this.h);ctx.globalCompositeOperation="multiply";ctx.globalAlpha=.25;ctx.fillStyle="red";ctx.fillRect(this.x,this.y,this.w,this.h);ctx.restore();return;}
+        if(now<this.glowUntil){ctx.save();ctx.shadowColor="rgba(0,255,255,.9)";ctx.shadowBlur=10;ctx.drawImage(this.image,this.x,this.y,this.w,this.h);ctx.globalCompositeOperation="screen";ctx.globalAlpha=.18;ctx.fillStyle="#aaf";ctx.fillRect(this.x,this.y,this.w,this.h);ctx.restore();return;}
+        ctx.drawImage(this.image,this.x,this.y,this.w,this.h);}
     }
+
+    class World {
+      constructor(){
+        this.width=canvas.width;this.height=canvas.height;
+        const y=this.height/2-60, spacing=this.width/8;
+        this.players=[new Player(s1,spacing*1.5,y,1,GRAVE_TO_NOTE[1]),new Player(s2,spacing*2.5,y,2,GRAVE_TO_NOTE[2]),new Player(s3,spacing*3.5,y,3,GRAVE_TO_NOTE[3]),new Player(s4,spacing*4.5,y,4,GRAVE_TO_NOTE[4]),new Player(s5,spacing*5.5,y,5,GRAVE_TO_NOTE[5]),new Player(s6,spacing*6.5,y,6,GRAVE_TO_NOTE[6])];
+        this.seq=[2,4,1,6,3,5];this.round=1;this.i=0;this.accept=false;this.audio=false;this.error=false;this.msg="";
+        canvas.addEventListener('click',async ev=>{
+          const r=canvas.getBoundingClientRect(),x=ev.clientX-r.left,y=ev.clientY-r.top;
+          if(!this.audio){initAudio();this.audio=true;this.round=1;this.msg="";await this.playRound();return;}
+          if(this.error||!this.accept)return;
+          const hit=this.players.find(p=>p.contains(x,y));if(!hit)return;
+          hit.glow(420);playNote(hit.note,420);
+          const expect=this.seq[this.i];
+          if(hit.id===expect){this.i++;if(this.i===this.round){this.accept=false;if(this.round===this.seq.length){playNote(SUCCESS_NOTE,160);await this.sleep(150);playNote(SUCCESS_NOTE,200);await this.sleep(190);playNote(SUCCESS_NOTE,240);this.msg="You won! 🎉";playAgainButton.style.display="block";return;}this.round++;await this.sleep(400);await this.playRound();}}else await this.fail();});
+        playAgainButton.onclick=async()=>{playAgainButton.style.display="none";this.reset();await this.playRound();};
+      }
+      reset(){this.round=1;this.i=0;this.accept=false;this.error=false;this.msg="";}
+      sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+      async fail(){this.accept=false;this.error=true;this.msg="Wrong gravestone! Try again.";this.players.forEach(p=>p.flashError(650));playNote(FAIL_NOTE,180);await this.sleep(100);playNote(FAIL_NOTE,220);await this.sleep(500);playAgainButton.style.display="block";}
+      async flashAndPlay(id,ms=620){const p=this.players.find(pl=>pl.id===id);if(!p)return;p.glow(ms-60);playNote(p.note,ms-80);await this.sleep(ms);}
+      async playRound(){this.error=false;this.accept=false;this.i=0;this.msg=`Listen and repeat (Round ${this.round})`;await this.sleep(300);for(let i=0;i<this.round;i++){await this.flashAndPlay(this.seq[i],620);await this.sleep(180);}this.msg="Your turn!";this.accept=true;}
+      drawHUD(){ctx.save();ctx.fillStyle="white";ctx.font="16px system-ui";ctx.fillText(this.audio?`Round ${this.round}/${this.seq.length}`:"Click the canvas to start sound",20,40);if(this.msg){ctx.font="20px system-ui";ctx.fillText(this.msg,20,70);}ctx.restore();}
+      loop(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(bg,0,0,canvas.width,canvas.height);this.players.forEach(p=>p.draw(ctx));this.drawHUD();requestAnimationFrame(()=>this.loop());}
+      start(){this.loop();}
+    }
+    const w=new World();w.start();
   }
+}
 </script>
+
