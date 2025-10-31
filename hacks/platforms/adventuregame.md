@@ -11,17 +11,47 @@ permalink: /spookyforest
 
 <!-- Start Button -->
 <button id="startButton"
-  style="font-size:24px;padding:10px 20px;margin:20px auto;display:block;cursor:pointer;background:red;color:white;border:none;border-radius:8px;transition:opacity .8s ease;">
+  style="
+    font-size: 24px;
+    padding: 10px 20px;
+    margin: 20px auto;
+    display: block;
+    cursor: pointer;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: opacity 0.8s ease;
+  ">
   Start Game
 </button>
 
-<!-- Play Again Button (hidden until needed) -->
-<button id="playAgainButton"
-  style="font-size:20px;padding:8px 16px;margin:10px auto;display:none;cursor:pointer;background:#333;color:white;border:none;border-radius:8px;">
-  Play Again
-</button>
+<!-- HOW TO PLAY SECTION -->
+<div id="instructions"
+  style="
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    transition: opacity 0.8s ease;
+    backdrop-filter: blur(4px);
+  ">
+  <h2>How to Play</h2>
+  <p> Use your keyboard or mouse to explore the spooky forest.</p>
+  <p> Click on gravestones to earn points and reveal hidden secrets.</p>
+  <p> Be aware of the gravestones as they glow in a special sequence.</p>
+  <p> Stay tuned to listen to the hidden melody revealed at the end.</p>
+   <p> Press <b>Start Game</b> when you’re ready to begin your adventure.</p>
+</div>
 
-<!-- Game Canvas -->
+<!--Game Canvas -->
 <canvas id="world" width="800" height="400"
   style="border:2px solid white;margin:0 auto;display:none;"></canvas>
 
