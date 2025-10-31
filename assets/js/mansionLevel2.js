@@ -30,8 +30,8 @@
   // Cemetery area (adjust these coordinates based on your image)
   // These coordinates define the grey brick rectangle area
   const cemetery = {
-    x: 500,
-    y: 200,
+    x: 400,
+    y: 150,
     width: 700,
     height: 450
   };
