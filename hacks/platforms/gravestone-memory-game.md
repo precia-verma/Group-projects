@@ -143,8 +143,8 @@ class GravestoneMemoryGame {
   
   initializeGravestones() {
     const colors = [
-      { normal: '#8B4513', glow: '#FFD700', note: 261.63 }, 
-      { normal: '#A0522D', glow: '#FF6347', note: 293.66 },   
+      { normal: '#8B4513', glow: '#FFD700', note: 261.63 },  // C4 - Do
+      { normal: '#A0522D', glow: '#FF6347', note: 293.66 },  // D4 - Re  
       { normal: '#654321', glow: '#32CD32', note: 329.63 },  
       { normal: '#8B7355', glow: '#00CED1', note: 349.23 },  
       { normal: '#A0522D', glow: '#9370DB', note: 392.00 },  
