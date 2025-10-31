@@ -1,10 +1,10 @@
 // Mansion Level 2 Game with WASD character movement
 (function () {
   const bgPaths = [
-    'assets/images/mansion-untitled.jpeg',
-    '/student/assets/images/mansion-untitled.jpeg',
-    './assets/images/mansion-untitled.jpeg',
-    '/student/images/haunted-mansion-battle-map-30x36-v0-u37w8jh2gfud1.webp'
+    'assets/images/newbackground.jpg',
+    '/student/assets/images/newbackground.jpg',
+    './assets/images/newbackground.jpg',
+    '/student/images/newbackground.jpg'
   ];
 
   let canvas, ctx;
